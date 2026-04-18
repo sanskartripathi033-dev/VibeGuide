@@ -4,7 +4,7 @@
   --atlas-sage: #479282;
   --atlas-sage-light: #64B1A0;
   --atlas-cream: #F0F4F2;
-  --atlas-pure: #FFFFFF;
+  --atlas-pure: #F6FCF1;
   
   --gold: #479282; /* Mapped to sage for backwards compatibility with some components */
   --gold-light: #64B1A0;
@@ -203,12 +203,12 @@ nav.scrolled {
 
 .btn-ghost {
   background: transparent;
-  border: 1.5px solid var(--gold);
-  color: var(--gold);
+  border: 1.5px solid var(--atlas-green);
+  color: var(--atlas-green);
 }
 .btn-ghost:hover {
-  background: rgba(59,167,143,0.08);
-  box-shadow: 0 0 20px rgba(59,167,143,0.3);
+  background: rgba(21, 58, 48, 0.05);
+  box-shadow: 0 0 20px rgba(21, 58, 48, 0.15);
 }
 
 .btn-teal {
@@ -219,9 +219,11 @@ nav.scrolled {
 .btn-teal:hover { box-shadow: 0 10px 25px rgba(0,122,122,0.35); }
 
 .btn-sm {
-  padding: 0.45rem 1rem;
-  font-size: 0.68rem;
-  letter-spacing: 1.5px;
+  padding: 0.45rem 1.25rem;
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
 /* ===== SECTION COMMON ===== */

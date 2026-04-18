@@ -55,10 +55,10 @@ export default function HomePage() {
       <div id="home" className="hero-animation-container">
         <HeroCanvas />
         <div className="hero-content">
-          <div className="hero-badge reveal glowing-slogan" style={{ 
-            boxShadow: '0 0 15px rgba(255,255,255,0.4)', 
-            textShadow: '0 0 8px rgba(255,255,255,0.6)', 
-            background: 'rgba(255,255,255,0.1)' 
+          <div className="hero-badge reveal glowing-slogan" style={{
+            boxShadow: '0 0 15px rgba(255,255,255,0.4)',
+            textShadow: '0 0 8px rgba(255,255,255,0.6)',
+            background: 'rgba(255,255,255,0.1)'
           }}>✦ ATLAS — Your Travel Companion ✦</div>
           <h1 className="hero-title reveal">
             Discover<span>the world</span>
@@ -83,7 +83,7 @@ export default function HomePage() {
               <div className="section-label">✦ The Pink City</div>
               <h2 className="section-title">The Soul of <em>Rajput Royalty</em></h2>
               <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '1.2rem', color: 'var(--text-muted)', lineHeight: 1.8 }}>
-                Founded in <strong>1727</strong>, Jaipur is India's first planned city — a masterpiece of Vedic architecture. 
+                Founded in <strong>1727</strong>, Jaipur is India's first planned city — a masterpiece of Vedic architecture.
                 Its rose-red sandstone walls and opulent palaces tell tales of a thousand years of desert glory.
               </p>
               <div style={{ marginTop: '2rem' }}>
@@ -110,22 +110,22 @@ export default function HomePage() {
             </h2>
             <a href="#" style={{ fontSize: '0.75rem', letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--atlas-sage)', textDecoration: 'none', fontWeight: 600 }}>VIEW ALL</a>
           </div>
-          
+
           {/* Bento Grid */}
           <div className="reveal" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.8fr) minmax(0, 1fr)', gap: '1.5rem', height: '500px' }}>
             {/* Main Feature */}
-            <div style={{ 
-                position: 'relative', 
-                borderRadius: '16px', 
-                overflow: 'hidden', 
-                boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
-                border: '1px solid rgba(255,255,255,0.6)',
-                transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease',
-              }}
+            <div style={{
+              position: 'relative',
+              borderRadius: '16px',
+              overflow: 'hidden',
+              boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+              border: '1px solid rgba(255,255,255,0.6)',
+              transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease',
+            }}
               onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-8px) scale(1.02)'; e.currentTarget.style.boxShadow = '0 20px 50px rgba(0,0,0,0.15)'; }}
               onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0) scale(1)'; e.currentTarget.style.boxShadow = '0 10px 40px rgba(0,0,0,0.1)'; }}
             >
-              <ImageWithLightbox src="/thumbnails/Hawa Mahal.png" alt="Hawa Mahal" className="monument-img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <ImageWithLightbox src="https://res.cloudinary.com/dbizje0oq/image/upload/v1776553271/Hawa-Mahal-2_zkkaws.jpg" alt="Hawa Mahal" className="monument-img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(21,58,48,0.9) 0%, transparent 60%)' }} />
               <div style={{ position: 'absolute', bottom: '2rem', left: '2rem', color: '#fff' }}>
                 <div style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: '#F6F8F7', opacity: 0.8, marginBottom: '0.2rem' }}>Iconic Landmark</div>
@@ -136,15 +136,15 @@ export default function HomePage() {
 
             {/* Stacked Features */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              <div style={{ 
-                  position: 'relative', 
-                  borderRadius: '16px', 
-                  overflow: 'hidden', 
-                  flex: 1, 
-                  boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
-                  border: '1px solid rgba(255,255,255,0.6)',
-                  transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease'
-                }}
+              <div style={{
+                position: 'relative',
+                borderRadius: '16px',
+                overflow: 'hidden',
+                flex: 1,
+                boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
+                border: '1px solid rgba(255,255,255,0.6)',
+                transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease'
+              }}
                 onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-6px) scale(1.02)'; e.currentTarget.style.boxShadow = '0 16px 40px rgba(0,0,0,0.15)'; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0) scale(1)'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(0,0,0,0.08)'; }}
               >
@@ -156,15 +156,15 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div style={{ 
-                  position: 'relative', 
-                  borderRadius: '16px', 
-                  overflow: 'hidden', 
-                  flex: 1, 
-                  boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
-                  border: '1px solid rgba(255,255,255,0.6)',
-                  transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease'
-                }}
+              <div style={{
+                position: 'relative',
+                borderRadius: '16px',
+                overflow: 'hidden',
+                flex: 1,
+                boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
+                border: '1px solid rgba(255,255,255,0.6)',
+                transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease'
+              }}
                 onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-6px) scale(1.02)'; e.currentTarget.style.boxShadow = '0 16px 40px rgba(0,0,0,0.15)'; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0) scale(1)'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(0,0,0,0.08)'; }}
               >
@@ -175,28 +175,48 @@ export default function HomePage() {
                   <div style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: '#c1dcd5' }}>Royal Residence</div>
                 </div>
               </div>
+
+              <div style={{
+                position: 'relative',
+                borderRadius: '16px',
+                overflow: 'hidden',
+                flex: 1,
+                boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
+                border: '1px solid rgba(255,255,255,0.6)',
+                transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease'
+              }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-6px) scale(1.02)'; e.currentTarget.style.boxShadow = '0 16px 40px rgba(0,0,0,0.15)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0) scale(1)'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(0,0,0,0.08)'; }}
+              >
+                <ImageWithLightbox src="https://res.cloudinary.com/dbizje0oq/image/upload/v1776553171/Ptrika_Gate_fninvx.png" alt="Patrika Gate" className="monument-img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(21,58,48,0.8) 0%, transparent 70%)' }} />
+                <div style={{ position: 'absolute', bottom: '1.5rem', left: '1.5rem', color: '#fff' }}>
+                  <div style={{ fontSize: '1.4rem', fontWeight: 700, fontFamily: "'Playfair Display', serif" }}>Patrika Gate</div>
+                  <div style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: '#c1dcd5' }}>Rainbow Memorial</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* ── EXPLORE (EXPERIENCES) ── */}
-      <section id="explore" className="section-bg" style={{ background: '#EEF2F1' }}>
+      <section id="explore" className="section-bg" style={{ background: '#DAE1DE' }}>
         <div className="container">
           <div className="reveal" style={{ textAlign: 'center', marginBottom: '4rem' }}>
             <h2 className="section-title" style={{ color: 'var(--atlas-green)' }}>Curated <em style={{ color: 'var(--atlas-sage)' }}>Experiences</em></h2>
             <p className="section-desc" style={{ margin: '0 auto', color: 'var(--text-muted)' }}>Immerse yourself in handpicked cultural touchpoints designed for the discerning traveler.</p>
           </div>
-          
+
           <div className="reveal" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
             {[
               { icon: <Utensils size={24} color="var(--atlas-sage)" />, title: "Royal Dining", desc: "Exclusive culinary journeys recreating historical feasts of the Maharajas." },
               { icon: <Coffee size={24} color="var(--atlas-sage)" />, title: "Artisan Workshops", desc: "Private sessions with master craftsmen of block printing and blue pottery." },
               { icon: <MapPin size={24} color="var(--atlas-sage)" />, title: "Night Heritage Walks", desc: "Discover illuminated monuments and quiet courtyards after twilight." }
             ].map(item => (
-              <div key={item.title} style={{ background: '#fff', borderRadius: '12px', padding: '2.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.03)', transition: 'transform 0.3s ease' }} 
-                   onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'}
-                   onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
+              <div key={item.title} style={{ background: 'var(--atlas-pure)', borderRadius: '20px', padding: '2.5rem', boxShadow: '0 10px 40px rgba(0,0,0,0.05)', transition: 'transform 0.4s ease', border: '1px solid rgba(21, 58, 48, 0.05)' }}
+                onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'}
+                onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
                 <div style={{ marginBottom: '1.5rem' }}>{item.icon}</div>
                 <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.4rem', color: 'var(--atlas-green)', marginBottom: '0.8rem' }}>{item.title}</h3>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>{item.desc}</p>
@@ -221,9 +241,9 @@ export default function HomePage() {
 
           <div className="tab-panel active" id="tab-cafes">
             {[
-              { img: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80', cat: <><Coffee size={12}/> Specialty Coffee</>, name: 'Anokhi Café', info: 'Breezy courtyard café with artisan coffee, fresh salads, and block-print interiors.', tags: ['Courtyard', 'Artisan'], q: 'Anokhi+Cafe+Jaipur' },
-              { img: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=80', cat: <><Coffee size={12}/> Rooftop Café</>, name: 'Tapri Central', info: "Jaipur's most beloved chai café with rooftop views of the old city and artisanal blends.", tags: ['Rooftop', 'Chai'], q: 'Tapri+Central+Jaipur' },
-              { img: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&q=80', cat: <><Coffee size={12}/> Heritage Café</>, name: 'Café Palladio', info: 'A jaw-dropping Indo-Italian space inside a 300-year-old haveli with hand-painted murals.', tags: ['Heritage', 'Design'], q: 'Cafe+Palladio+Jaipur' },
+              { img: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80', cat: <><Coffee size={12} /> Specialty Coffee</>, name: 'Anokhi Café', info: 'Breezy courtyard café with artisan coffee, fresh salads, and block-print interiors.', tags: ['Courtyard', 'Artisan'], q: 'Anokhi+Cafe+Jaipur' },
+              { img: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=80', cat: <><Coffee size={12} /> Rooftop Café</>, name: 'Tapri Central', info: "Jaipur's most beloved chai café with rooftop views of the old city and artisanal blends.", tags: ['Rooftop', 'Chai'], q: 'Tapri+Central+Jaipur' },
+              { img: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&q=80', cat: <><Coffee size={12} /> Heritage Café</>, name: 'Café Palladio', info: 'A jaw-dropping Indo-Italian space inside a 300-year-old haveli with hand-painted murals.', tags: ['Heritage', 'Design'], q: 'Cafe+Palladio+Jaipur' },
             ].map(({ img, cat, name, info, tags, q }) => (
               <div className="place-card reveal" key={name}>
                 <div className="place-img-container">
@@ -235,7 +255,7 @@ export default function HomePage() {
                   <div className="place-info">{info}</div>
                   <div className="place-tags">{tags.map(t => <span className="place-tag" key={t}>{t}</span>)}</div>
                   <div className="place-actions">
-                    <a href={`https://maps.google.com/?q=${q}`} target="_blank" rel="noreferrer" className="btn btn-teal btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <a href={`https://maps.google.com/?q=${q}`} target="_blank" rel="noreferrer" className="btn btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 800, color: 'var(--atlas-green)', border: '1.5px solid var(--atlas-green)', background: 'transparent' }}>
                       <Navigation size={14} /> Directions
                     </a>
                   </div>
@@ -246,9 +266,9 @@ export default function HomePage() {
 
           <div className="tab-panel" id="tab-restaurants">
             {[
-              { img: 'https://images.unsplash.com/photo-1599458252573-56ae36120de1?w=600&q=80', cat: <><Utensils size={12}/> Royal Dining</>, name: 'Suvarna Mahal', info: 'Dine like royalty inside the Rambagh Palace. Gold leaf ceilings and traditional royal thali.', tags: ['Fine Dining', 'Royal'], q: 'Suvarna+Mahal+Jaipur' },
-              { img: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=600&q=80', cat: <><Utensils size={12}/> Street Food King</>, name: 'LMB Jaipur', info: 'Beloved sweets shop and restaurant since 1954. Pyaaz kachori and ghewar are mandatory.', tags: ['Legendary', 'Sweets'], q: 'LMB+Jaipur' },
-              { img: 'https://images.unsplash.com/photo-1567337710282-00832b415979?w=600&q=80', cat: <><Utensils size={12}/> Traditional</>, name: 'Handi Restaurant', info: 'Jaipur institution for authentic Rajasthani dal baati churma and clay oven specialties.', tags: ['Authentic', 'Folk music'], q: 'Handi+Restaurant+Jaipur' },
+              { img: 'https://images.unsplash.com/photo-1599458252573-56ae36120de1?w=600&q=80', cat: <><Utensils size={12} /> Royal Dining</>, name: 'Suvarna Mahal', info: 'Dine like royalty inside the Rambagh Palace. Gold leaf ceilings and traditional royal thali.', tags: ['Fine Dining', 'Royal'], q: 'Suvarna+Mahal+Jaipur' },
+              { img: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=600&q=80', cat: <><Utensils size={12} /> Street Food King</>, name: 'LMB Jaipur', info: 'Beloved sweets shop and restaurant since 1954. Pyaaz kachori and ghewar are mandatory.', tags: ['Legendary', 'Sweets'], q: 'LMB+Jaipur' },
+              { img: 'https://images.unsplash.com/photo-1567337710282-00832b415979?w=600&q=80', cat: <><Utensils size={12} /> Traditional</>, name: 'Handi Restaurant', info: 'Jaipur institution for authentic Rajasthani dal baati churma and clay oven specialties.', tags: ['Authentic', 'Folk music'], q: 'Handi+Restaurant+Jaipur' },
             ].map(({ img, cat, name, info, tags, q }) => (
               <div className="place-card reveal" key={name}>
                 <div className="place-img-container">
@@ -260,7 +280,7 @@ export default function HomePage() {
                   <div className="place-info">{info}</div>
                   <div className="place-tags">{tags.map(t => <span className="place-tag" key={t}>{t}</span>)}</div>
                   <div className="place-actions">
-                    <a href={`https://maps.google.com/?q=${q}`} target="_blank" rel="noreferrer" className="btn btn-primary btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <a href={`https://maps.google.com/?q=${q}`} target="_blank" rel="noreferrer" className="btn btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 800, color: 'var(--atlas-green)', border: '1.5px solid var(--atlas-green)', background: 'transparent' }}>
                       <Navigation size={14} /> Directions
                     </a>
                   </div>
@@ -271,9 +291,9 @@ export default function HomePage() {
 
           <div className="tab-panel" id="tab-shops">
             {[
-              { img: 'https://images.unsplash.com/photo-1609743522471-83c84ce23e32?w=600&q=80', cat: <><ShoppingBag size={12}/> Jewellery</>, name: 'Johari Bazaar', info: "The heartbeat of Jaipur's gem trade. Rubies, emeralds, and kundan jewellery since the 16th century.", tags: ['Gems', 'Jewellery'], q: 'Johari+Bazaar+Jaipur' },
-              { img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80', cat: <><ShoppingBag size={12}/> Textiles</>, name: 'Bapu Bazaar', info: "Go-to for block-print fabrics, mojari shoes, and Rajasthani lac bangles. Bargaining welcomed.", tags: ['Prints', 'Shoes'], q: 'Bapu+Bazaar+Jaipur' },
-              { img: 'https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?w=600&q=80', cat: <><ShoppingBag size={12}/> Curated</>, name: 'Anokhi Store', info: 'Iconic brand for hand block-printed garments. Every piece is ethically made by local artisans.', tags: ['Ethical', 'Modern'], q: 'Anokhi+Store+Jaipur' },
+              { img: 'https://images.unsplash.com/photo-1609743522471-83c84ce23e32?w=600&q=80', cat: <><ShoppingBag size={12} /> Jewellery</>, name: 'Johari Bazaar', info: "The heartbeat of Jaipur's gem trade. Rubies, emeralds, and kundan jewellery since the 16th century.", tags: ['Gems', 'Jewellery'], q: 'Johari+Bazaar+Jaipur' },
+              { img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80', cat: <><ShoppingBag size={12} /> Textiles</>, name: 'Bapu Bazaar', info: "Go-to for block-print fabrics, mojari shoes, and Rajasthani lac bangles. Bargaining welcomed.", tags: ['Prints', 'Shoes'], q: 'Bapu+Bazaar+Jaipur' },
+              { img: 'https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?w=600&q=80', cat: <><ShoppingBag size={12} /> Curated</>, name: 'Anokhi Store', info: 'Iconic brand for hand block-printed garments. Every piece is ethically made by local artisans.', tags: ['Ethical', 'Modern'], q: 'Anokhi+Store+Jaipur' },
             ].map(({ img, cat, name, info, tags, q }) => (
               <div className="place-card reveal" key={name}>
                 <div className="place-img-container">
@@ -285,7 +305,7 @@ export default function HomePage() {
                   <div className="place-info">{info}</div>
                   <div className="place-tags">{tags.map(t => <span className="place-tag" key={t}>{t}</span>)}</div>
                   <div className="place-actions">
-                    <a href={`https://maps.google.com/?q=${q}`} target="_blank" rel="noreferrer" className="btn btn-ghost btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <a href={`https://maps.google.com/?q=${q}`} target="_blank" rel="noreferrer" className="btn btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 800, color: 'var(--atlas-green)', border: '1.5px solid var(--atlas-green)', background: 'transparent' }}>
                       <Navigation size={14} /> Directions
                     </a>
                   </div>
@@ -323,11 +343,14 @@ export default function HomePage() {
       </section>
 
       {/* ── MAP & HEATMAP ── */}
-      <section id="map-section" className="section-bg" style={{ background: '#FFFFFF' }}>
+      <section id="map-section" className="section-bg" style={{ background: 'var(--atlas-pure)' }}>
         <div className="container" style={{ position: 'relative', zIndex: 10 }}>
           <div className="reveal" style={{ textAlign: 'center', marginBottom: '3rem' }}>
             <h2 className="section-title" style={{ color: 'var(--atlas-green)' }}>Jaipur <em style={{ color: 'var(--atlas-sage)' }}>Heatmap</em></h2>
-            <p className="section-desc" style={{ margin: '0 auto', color: 'var(--text-muted)' }}>Watch in real-time as travellers explore the monuments of the Pink City.</p>
+            <p className="section-desc" style={{ margin: '0 0 1.5rem 0', color: 'var(--text-muted)' }}>Watch in real-time as travellers explore the monuments of the Pink City.</p>
+            <a href="https://www.google.com/maps/place/Jaipur,+Rajasthan/@26.9124,75.7873,12z" target="_blank" rel="noreferrer" className="btn btn-ghost btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: 700 }}>
+              <Navigation size={14} /> View on Google Maps
+            </a>
           </div>
           <div className="reveal">
             <HeatMap user={user} />
