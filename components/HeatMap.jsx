@@ -25,8 +25,8 @@ export default function HeatMap({ user }) {
       import('leaflet.heat').then(() => {
         // Initialize Map
         const map = L.map(mapContainerRef.current, {
-          center: [20, 0], // Global View
-          zoom: 2,
+          center: [26.9124, 75.7873], // Jaipur, Rajasthan
+          zoom: 13,
           zoomControl: true,
         });
 
@@ -43,13 +43,13 @@ export default function HeatMap({ user }) {
         heatmapLayerRef.current = L.heatLayer([], {
           radius: 25,
           blur: 15,
-          maxZoom: 14,
+          maxZoom: 17,
           gradient: {
             0.0: 'rgba(0,0,0,0)',
-            0.3: '#00c850',   // Green
-            DEFAULT: '#ffe600', // Yellow
-            0.6: '#ff5000',   // Orange
-            1.0: '#ff0000',   // Red
+            0.3: '#00c850',
+            0.5: '#ffe600',
+            0.7: '#ff5000',
+            1.0: '#ff0000',
           }
         });
 
@@ -261,12 +261,12 @@ export default function HeatMap({ user }) {
         pointerEvents: 'none',
       }}>
         <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.1rem', color: 'var(--gold)', marginBottom: '0.2rem' }}>
-          {currentCoords ? '📍 Your Location' : '📍 Global Tracking'}
+          {currentCoords ? '📍 Your Location' : '📍 Jaipur, Rajasthan'}
         </h3>
         <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-          {currentCoords 
+          {currentCoords
             ? `${currentCoords.lat.toFixed(4)}° N, ${currentCoords.lng.toFixed(4)}° E`
-            : 'Tracking worldwide active'}
+            : '26.9124° N, 75.7873° E'}
         </p>
       </div>
 

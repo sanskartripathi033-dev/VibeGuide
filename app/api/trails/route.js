@@ -6,7 +6,7 @@ export async function POST(request) {
   try {
     const { lat, lng, user_id } = await request.json();
 
-    if (!lat || !lng || !user_id) {
+    if (lat === undefined || lng === undefined || !user_id) {
       return NextResponse.json({ error: 'Missing lat, lng, or user_id' }, { status: 400 });
     }
 
