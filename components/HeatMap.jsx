@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { Flame, Activity, MapPin } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 
 export default function HeatMap({ user }) {
@@ -116,7 +117,7 @@ export default function HeatMap({ user }) {
       setStatusMsg('Tracking stopped');
     } else {
       setTrackingOn(true);
-      setStatusMsg('📍 Tracking your path...');
+      setStatusMsg('Tracking your path...');
       trackingIntervalRef.current = setInterval(() => {
         navigator.geolocation.getCurrentPosition(async (pos) => {
           const lat = pos.coords.latitude;
@@ -141,7 +142,7 @@ export default function HeatMap({ user }) {
              heatmapLayerRef.current.addLatLng([lat, lng, 1.0]);
           }
 
-        }, (err) => setStatusMsg('📍 Location access denied'));
+        }, (err) => setStatusMsg('Location access denied'));
       }, 10000); // 10 seconds
     }
   };
@@ -195,7 +196,7 @@ export default function HeatMap({ user }) {
             whiteSpace: 'nowrap',
           }}
         >
-          🔥 {heatmapOn ? 'Hide' : 'Show'} Live Crowd Trails
+          <Flame size={16} /> {heatmapOn ? 'Hide' : 'Show'} Live Crowd Trails
           {heatmapOn && pointCount > 0 && (
             <span style={{
               background: 'rgba(255,255,255,0.25)',
@@ -229,7 +230,8 @@ export default function HeatMap({ user }) {
             whiteSpace: 'nowrap',
           }}
         >
-          {trackingOn ? '🟢 Tracking ON' : '⬜ Track My Path'}
+          <Activity size={16} color={trackingOn ? "#00ffaa" : "#94a3b8"} /> 
+          {trackingOn ? 'Tracking ON' : 'Track My Path'}
         </button>
 
         {/* Status Message */}
@@ -260,8 +262,8 @@ export default function HeatMap({ user }) {
         zIndex: 10,
         pointerEvents: 'none',
       }}>
-        <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.1rem', color: 'var(--gold)', marginBottom: '0.2rem' }}>
-          {currentCoords ? '📍 Your Location' : '📍 Jaipur, Rajasthan'}
+        <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.1rem', color: 'var(--gold)', display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.2rem' }}>
+          <MapPin size={18} /> {currentCoords ? 'Your Location' : 'Jaipur, Rajasthan'}
         </h3>
         <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
           {currentCoords

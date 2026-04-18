@@ -113,24 +113,21 @@ export default function WeatherWidget() {
         style={{
           width: '60px',
           height: '60px',
-          background: 'linear-gradient(135deg, rgba(59,167,143,0.9), rgba(20,50,45,0.95))',
-          backdropFilter: 'blur(8px)',
-          borderRadius: '30px',
+          background: 'transparent',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
-          border: '1px solid rgba(132,212,192,0.4)',
-          boxShadow: isHovered 
-            ? '0 0 20px rgba(59,167,143,0.6)' 
-            : '0 8px 32px rgba(0,0,0,0.4)',
+          filter: isHovered 
+            ? 'drop-shadow(0 0 12px rgba(59,167,143,0.8))' 
+            : 'drop-shadow(0 8px 16px rgba(0,0,0,0.4))',
           transition: 'all 0.3s ease',
         }}
       >
         <Icon 
-          size={28} 
+          size={42} 
           color={color === '#facc15' ? '#fde047' : '#ffffff'} 
-          strokeWidth={2.5} 
+          strokeWidth={2} 
         />
       </div>
 

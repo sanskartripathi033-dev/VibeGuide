@@ -9,6 +9,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import ImageWithLightbox from '@/components/ImageWithLightbox';
+import { MapPin, Coffee, Utensils, ShoppingBag, Bike, CarTaxiFront, Car, Navigation } from 'lucide-react';
+
 
 /* ── helpers ── */
 function useReveal() {
@@ -122,7 +124,9 @@ export default function HomePage() {
                   <div className="monument-name">{name}</div>
                   <div className="monument-desc">{desc}</div>
                   <div className="monument-action">
-                    <a href={`https://maps.google.com/?q=${maps}`} target="_blank" rel="noreferrer" className="btn btn-gold btn-sm">📍 View on Map</a>
+                    <a href={`https://maps.google.com/?q=${maps}`} target="_blank" rel="noreferrer" className="btn btn-gold btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <MapPin size={14} /> View on Map
+                    </a>
                   </div>
                 </div>
               </div>
@@ -141,16 +145,16 @@ export default function HomePage() {
             <p className="section-desc">From centuries-old bazaars to specialty coffee roasters — the city rewards every wanderer.</p>
           </div>
           <div className="tabs reveal">
-            <button className="tab active" onClick={() => switchTab('cafes')}>☕ Cafés</button>
-            <button className="tab" onClick={() => switchTab('restaurants')}>🍽 Restaurants</button>
-            <button className="tab" onClick={() => switchTab('shops')}>🛍 Bazaars</button>
+            <button className="tab active" onClick={() => switchTab('cafes')} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Coffee size={16} /> Cafés</button>
+            <button className="tab" onClick={() => switchTab('restaurants')} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Utensils size={16} /> Restaurants</button>
+            <button className="tab" onClick={() => switchTab('shops')} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><ShoppingBag size={16} /> Bazaars</button>
           </div>
 
           <div className="tab-panel active" id="tab-cafes">
             {[
-              { img: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80', cat: '☕ Specialty Coffee', name: 'Anokhi Café', info: 'Breezy courtyard café with artisan coffee, fresh salads, and block-print interiors.', tags: ['Courtyard', 'Artisan'], q: 'Anokhi+Cafe+Jaipur' },
-              { img: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=80', cat: '☕ Rooftop Café', name: 'Tapri Central', info: "Jaipur's most beloved chai café with rooftop views of the old city and artisanal blends.", tags: ['Rooftop', 'Chai'], q: 'Tapri+Central+Jaipur' },
-              { img: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&q=80', cat: '☕ Heritage Café', name: 'Café Palladio', info: 'A jaw-dropping Indo-Italian space inside a 300-year-old haveli with hand-painted murals.', tags: ['Heritage', 'Design'], q: 'Cafe+Palladio+Jaipur' },
+              { img: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80', cat: <><Coffee size={12}/> Specialty Coffee</>, name: 'Anokhi Café', info: 'Breezy courtyard café with artisan coffee, fresh salads, and block-print interiors.', tags: ['Courtyard', 'Artisan'], q: 'Anokhi+Cafe+Jaipur' },
+              { img: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=80', cat: <><Coffee size={12}/> Rooftop Café</>, name: 'Tapri Central', info: "Jaipur's most beloved chai café with rooftop views of the old city and artisanal blends.", tags: ['Rooftop', 'Chai'], q: 'Tapri+Central+Jaipur' },
+              { img: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&q=80', cat: <><Coffee size={12}/> Heritage Café</>, name: 'Café Palladio', info: 'A jaw-dropping Indo-Italian space inside a 300-year-old haveli with hand-painted murals.', tags: ['Heritage', 'Design'], q: 'Cafe+Palladio+Jaipur' },
             ].map(({ img, cat, name, info, tags, q }) => (
               <div className="place-card reveal" key={name}>
                 <ImageWithLightbox src={img} alt={name} className="place-img" />
@@ -160,7 +164,9 @@ export default function HomePage() {
                   <div className="place-info">{info}</div>
                   <div className="place-tags">{tags.map(t => <span className="place-tag" key={t}>{t}</span>)}</div>
                   <div className="place-actions">
-                    <a href={`https://maps.google.com/?q=${q}`} target="_blank" rel="noreferrer" className="btn btn-teal btn-sm">📍 Directions</a>
+                    <a href={`https://maps.google.com/?q=${q}`} target="_blank" rel="noreferrer" className="btn btn-teal btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <Navigation size={14} /> Directions
+                    </a>
                   </div>
                 </div>
               </div>
@@ -169,9 +175,9 @@ export default function HomePage() {
 
           <div className="tab-panel" id="tab-restaurants">
             {[
-              { img: 'https://images.unsplash.com/photo-1599458252573-56ae36120de1?w=600&q=80', cat: '🍽 Royal Dining', name: 'Suvarna Mahal', info: 'Dine like royalty inside the Rambagh Palace. Gold leaf ceilings and traditional royal thali.', tags: ['Fine Dining', 'Royal'], q: 'Suvarna+Mahal+Jaipur' },
-              { img: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=600&q=80', cat: '🍽 Street Food King', name: 'LMB Jaipur', info: 'Beloved sweets shop and restaurant since 1954. Pyaaz kachori and ghewar are mandatory.', tags: ['Legendary', 'Sweets'], q: 'LMB+Jaipur' },
-              { img: 'https://images.unsplash.com/photo-1567337710282-00832b415979?w=600&q=80', cat: '🍽 Traditional', name: 'Handi Restaurant', info: 'Jaipur institution for authentic Rajasthani dal baati churma and clay oven specialties.', tags: ['Authentic', 'Folk music'], q: 'Handi+Restaurant+Jaipur' },
+              { img: 'https://images.unsplash.com/photo-1599458252573-56ae36120de1?w=600&q=80', cat: <><Utensils size={12}/> Royal Dining</>, name: 'Suvarna Mahal', info: 'Dine like royalty inside the Rambagh Palace. Gold leaf ceilings and traditional royal thali.', tags: ['Fine Dining', 'Royal'], q: 'Suvarna+Mahal+Jaipur' },
+              { img: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=600&q=80', cat: <><Utensils size={12}/> Street Food King</>, name: 'LMB Jaipur', info: 'Beloved sweets shop and restaurant since 1954. Pyaaz kachori and ghewar are mandatory.', tags: ['Legendary', 'Sweets'], q: 'LMB+Jaipur' },
+              { img: 'https://images.unsplash.com/photo-1567337710282-00832b415979?w=600&q=80', cat: <><Utensils size={12}/> Traditional</>, name: 'Handi Restaurant', info: 'Jaipur institution for authentic Rajasthani dal baati churma and clay oven specialties.', tags: ['Authentic', 'Folk music'], q: 'Handi+Restaurant+Jaipur' },
             ].map(({ img, cat, name, info, tags, q }) => (
               <div className="place-card reveal" key={name}>
                 <ImageWithLightbox src={img} alt={name} className="place-img" />
@@ -181,7 +187,9 @@ export default function HomePage() {
                   <div className="place-info">{info}</div>
                   <div className="place-tags">{tags.map(t => <span className="place-tag" key={t}>{t}</span>)}</div>
                   <div className="place-actions">
-                    <a href={`https://maps.google.com/?q=${q}`} target="_blank" rel="noreferrer" className="btn btn-primary btn-sm">📍 Directions</a>
+                    <a href={`https://maps.google.com/?q=${q}`} target="_blank" rel="noreferrer" className="btn btn-primary btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <Navigation size={14} /> Directions
+                    </a>
                   </div>
                 </div>
               </div>
@@ -190,9 +198,9 @@ export default function HomePage() {
 
           <div className="tab-panel" id="tab-shops">
             {[
-              { img: 'https://images.unsplash.com/photo-1609743522471-83c84ce23e32?w=600&q=80', cat: '🛍 Jewellery', name: 'Johari Bazaar', info: "The heartbeat of Jaipur's gem trade. Rubies, emeralds, and kundan jewellery since the 16th century.", tags: ['Gems', 'Jewellery'], q: 'Johari+Bazaar+Jaipur' },
-              { img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80', cat: '🛍 Textiles', name: 'Bapu Bazaar', info: "Go-to for block-print fabrics, mojari shoes, and Rajasthani lac bangles. Bargaining welcomed.", tags: ['Prints', 'Shoes'], q: 'Bapu+Bazaar+Jaipur' },
-              { img: 'https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?w=600&q=80', cat: '🛍 Curated', name: 'Anokhi Store', info: 'Iconic brand for hand block-printed garments. Every piece is ethically made by local artisans.', tags: ['Ethical', 'Modern'], q: 'Anokhi+Store+Jaipur' },
+              { img: 'https://images.unsplash.com/photo-1609743522471-83c84ce23e32?w=600&q=80', cat: <><ShoppingBag size={12}/> Jewellery</>, name: 'Johari Bazaar', info: "The heartbeat of Jaipur's gem trade. Rubies, emeralds, and kundan jewellery since the 16th century.", tags: ['Gems', 'Jewellery'], q: 'Johari+Bazaar+Jaipur' },
+              { img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80', cat: <><ShoppingBag size={12}/> Textiles</>, name: 'Bapu Bazaar', info: "Go-to for block-print fabrics, mojari shoes, and Rajasthani lac bangles. Bargaining welcomed.", tags: ['Prints', 'Shoes'], q: 'Bapu+Bazaar+Jaipur' },
+              { img: 'https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?w=600&q=80', cat: <><ShoppingBag size={12}/> Curated</>, name: 'Anokhi Store', info: 'Iconic brand for hand block-printed garments. Every piece is ethically made by local artisans.', tags: ['Ethical', 'Modern'], q: 'Anokhi+Store+Jaipur' },
             ].map(({ img, cat, name, info, tags, q }) => (
               <div className="place-card reveal" key={name}>
                 <ImageWithLightbox src={img} alt={name} className="place-img" />
@@ -202,7 +210,9 @@ export default function HomePage() {
                   <div className="place-info">{info}</div>
                   <div className="place-tags">{tags.map(t => <span className="place-tag" key={t}>{t}</span>)}</div>
                   <div className="place-actions">
-                    <a href={`https://maps.google.com/?q=${q}`} target="_blank" rel="noreferrer" className="btn btn-ghost btn-sm">📍 Directions</a>
+                    <a href={`https://maps.google.com/?q=${q}`} target="_blank" rel="noreferrer" className="btn btn-ghost btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <Navigation size={14} /> Directions
+                    </a>
                   </div>
                 </div>
               </div>
@@ -222,9 +232,9 @@ export default function HomePage() {
           </div>
           <div className="ride-grid">
             {[
-              { icon: '🏍️', name: 'Rapido', desc: "India's fastest bike taxi. Perfect for short hops through Jaipur's Old City lanes.", href: 'https://rapido.bike', cls: 'btn-gold', label: 'Open App' },
-              { icon: '🚖', name: 'OLA Cabs', desc: 'Book autos, minis, or SUVs. Strong coverage around Railway Stations and major tourist zones.', href: 'https://olacabs.com', cls: 'btn-teal', label: 'Open App' },
-              { icon: '🚗', name: 'Uber', desc: 'Reliable cab booking with fare transparency. Uber Auto and UberGo are popular choices.', href: 'https://uber.com', cls: 'btn-primary', label: 'Open App' },
+              { icon: <Bike size={40} color="var(--gold)" />, name: 'Rapido', desc: "India's fastest bike taxi. Perfect for short hops through Jaipur's Old City lanes.", href: 'https://rapido.bike', cls: 'btn-gold', label: 'Open App' },
+              { icon: <CarTaxiFront size={40} color="var(--teal)" />, name: 'OLA Cabs', desc: 'Book autos, minis, or SUVs. Strong coverage around Railway Stations and major tourist zones.', href: 'https://olacabs.com', cls: 'btn-teal', label: 'Open App' },
+              { icon: <Car size={40} color="var(--terracotta-light)" />, name: 'Uber', desc: 'Reliable cab booking with fare transparency. Uber Auto and UberGo are popular choices.', href: 'https://uber.com', cls: 'btn-primary', label: 'Open App' },
             ].map(({ icon, name, desc, href, cls, label }) => (
               <div className="ride-card reveal" key={name}>
                 <div className="ride-icon" style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>{icon}</div>

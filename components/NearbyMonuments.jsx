@@ -1,5 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { MapPin } from 'lucide-react';
+
 
 // Hardcoded coordinates for Jaipur monuments
 const MONUMENTS = [
@@ -79,9 +81,10 @@ export default function NearbyMonuments() {
           background: 'rgba(59,167,143,0.1)', border: '1px solid var(--gold)',
           color: 'var(--gold)', padding: '0.6rem 1.2rem', borderRadius: '4px',
           fontFamily: "'Outfit',sans-serif", fontSize: '0.75rem', letterSpacing: '1px',
-          textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.3s'
+          textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.3s',
+          display: 'flex', alignItems: 'center', gap: '0.4rem'
         }}>
-          {loading ? 'Locating...' : '📍 Find Nearby Monuments'}
+          {loading ? 'Locating...' : <><MapPin size={14} /> Find Nearby Monuments</>}
         </button>
       </div>
 
