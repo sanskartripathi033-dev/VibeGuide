@@ -7,6 +7,7 @@ import ThemeToggle from '@/components/ThemeToggle';
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [isScrolled, setIsScrolled] = useState(false);
   const [user, setUser] = useState(null);
   const [location, setLocation] = useState(null);
   const [isLocating, setIsLocating] = useState(false);
@@ -16,7 +17,21 @@ export default function Navbar() {
     const { data: listener } = supabase.auth.onAuthStateChange((_e, session) => {
       setUser(session?.user ?? null);
     });
-    return () => listener.subscription.unsubscribe();
+
+    const handleScroll = () => {
+      // Toggle navbar dock position when scrolled past hero (approx 700px or 80vh)
+      if (window.scrollY > 80) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      listener.subscription.unsubscribe();
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const handleLocate = () => {
@@ -68,8 +83,8 @@ export default function Navbar() {
   };
 
   return (
-    <nav>
-      <Link href="/" className="nav-logo">VibeGuide</Link>
+    <nav className={isScrolled ? 'scrolled' : ''}>
+      <Link href="/" className="nav-logo">ATLAS</Link>
       <ul className="nav-links">
         <li><Link href="/about">About</Link></li>
         <li><Link href="/#monuments">Monuments</Link></li>

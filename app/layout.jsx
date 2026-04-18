@@ -2,8 +2,8 @@ import './globals.css';
 import { Providers } from '@/components/Providers';
 
 export const metadata = {
-  title: 'VibeGuide — Your Global Travel Companion',
-  description: "Discover the world's legendary monuments, vibrant cultures, hidden cafés, and create custom AI itineraries.",
+  title: 'ATLAS — Sovereign Heritage Journeys',
+  description: "Step into a world where ancient stone whispers tales of royalty. Curate your sovereign journey through the Pink City.",
   manifest: '/manifest.json',
 };
 

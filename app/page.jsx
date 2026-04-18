@@ -2,7 +2,8 @@
 import Navbar from '@/components/Navbar';
 import HeroCanvas from '@/components/HeroCanvas';
 import HeatMap from '@/components/HeatMap';
-import LanguageTranslator from '@/components/LanguageTranslator';
+import LiveTranslator from '@/components/LiveTranslator';
+import ChatBot from '@/components/ChatBot';
 import NearbyMonuments from '@/components/NearbyMonuments';
 import WeatherWidget from '@/components/WeatherWidget';
 import { useState, useEffect } from 'react';
@@ -54,17 +55,21 @@ export default function HomePage() {
       <div id="home" className="hero-animation-container">
         <HeroCanvas />
         <div className="hero-content">
-          <div className="hero-badge reveal">✦ VibeGuide — Your Jaipur Travel Companion ✦</div>
+          <div className="hero-badge reveal glowing-slogan" style={{ 
+            boxShadow: '0 0 15px rgba(255,255,255,0.4)', 
+            textShadow: '0 0 8px rgba(255,255,255,0.6)', 
+            background: 'rgba(255,255,255,0.1)' 
+          }}>✦ ATLAS — Your Travel Companion ✦</div>
           <h1 className="hero-title reveal">
-            Discover<span>Jaipur</span>
+            Discover<span>the world</span>
           </h1>
           <p className="hero-sub reveal">
             Your royal guide to Jaipur's legendary forts, living bazaars, hidden cafés & golden sunsets of Rajasthan
           </p>
           <div className="hero-cta reveal">
-            <a href="#monuments" className="btn btn-primary">⬡ Iconic Monuments</a>
-            <a href="#explore" className="btn btn-gold">☕ Cafés & Bazaars</a>
-            <a href="#ride" className="btn btn-ghost">🚖 Plan Your Ride</a>
+            <a href="#monuments" className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><MapPin size={16} /> Iconic Monuments</a>
+            <a href="#explore" className="btn btn-gold" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Coffee size={16} /> Cafés & Bazaars</a>
+            <a href="#ride" className="btn btn-ghost" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Car size={16} /> Plan Your Ride</a>
           </div>
         </div>
       </div>
@@ -97,52 +102,116 @@ export default function HomePage() {
       </section>
 
       {/* ── MONUMENTS ── */}
-      <section id="monuments" className="section-bg">
-        <div className="section-bg-gradient" style={{ background: 'rgba(13,22,20,0.88)' }} />
+      <section id="monuments" className="section-bg" style={{ background: 'var(--atlas-cream)' }}>
         <div className="container">
-          <div className="reveal" style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <div className="section-label">✦ Heritage Landmarks</div>
-            <h2 className="section-title">Jaipur&apos;s <em>Timeless Monuments</em></h2>
-            <p className="section-desc" style={{ margin: '0 auto' }}>Five centuries of Rajput glory carved in rose-red sandstone and sky-piercing minarets.</p>
+          <div className="reveal" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2rem' }}>
+            <h2 className="section-title" style={{ margin: 0, color: 'var(--atlas-green)' }}>
+              Sovereign <em style={{ color: 'var(--atlas-sage)' }}>Monuments</em>
+            </h2>
+            <a href="#" style={{ fontSize: '0.75rem', letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--atlas-sage)', textDecoration: 'none', fontWeight: 600 }}>VIEW ALL</a>
           </div>
-          <div className="ornament reveal">
-            <div className="ornament-line" /><div className="ornament-diamond" /><div className="ornament-line rev" />
-          </div>
-          <div className="monuments-grid">
-            {[
-              { img: '/thumbnails/Hawa Mahal.png', tag: 'Iconic Landmark', name: 'Hawa Mahal', desc: 'The "Palace of Winds" — built in 1799 with 953 intricately carved windows allowing royal women to observe street festivals.', maps: 'Hawa+Mahal+Jaipur' },
-              { img: '/thumbnails/Amber Fort.png', tag: 'UNESCO Heritage', name: 'Amber Fort', desc: 'A hilltop marvel of red sandstone & marble. Explore the Sheesh Mahal — a hall of mirrors that glitters like a thousand stars.', maps: 'Amer+Fort+Jaipur' },
-              { img: '/thumbnails/City Palace.png', tag: 'Royal Residence', name: 'City Palace', desc: 'A royal complex still home to the Jaipur royal family. Houses a museum with armour, carpets, and silver vessels.', maps: 'City+Palace+Jaipur' },
-              { img: '/thumbnails/Jantar Mantar.png', tag: 'UNESCO — Astronomy', name: 'Jantar Mantar', desc: "The world's largest stone sundial and a collection of 19 astronomical instruments. Accurate to within two seconds.", maps: 'Jantar+Mantar+Jaipur' },
-              { img: '/thumbnails/Nahar Garh.png', tag: 'Sunset Fortress', name: 'Nahargarh Fort', desc: 'Perched on the Aravalli ridge, Nahargarh offers a panoramic canvas of the Pink City as it turns amber at dusk.', maps: 'Nahargarh+Fort+Jaipur' },
-              { img: '/thumbnails/Jal Mahal.png', tag: 'Water Palace', name: 'Jal Mahal', desc: 'A five-storey palace that appears to float on Man Sagar Lake — four floors submerged beneath the water.', maps: 'Jal+Mahal+Jaipur' },
-            ].map(({ img, tag, name, desc, maps }) => (
-              <div className="monument-card reveal" key={name}>
-                <ImageWithLightbox src={img} alt={name} className="monument-img" />
-                <div className="monument-overlay">
-                  <div className="monument-tag">✦ {tag}</div>
-                  <div className="monument-name">{name}</div>
-                  <div className="monument-desc">{desc}</div>
-                  <div className="monument-action">
-                    <a href={`https://maps.google.com/?q=${maps}`} target="_blank" rel="noreferrer" className="btn btn-gold btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                      <MapPin size={14} /> View on Map
-                    </a>
-                  </div>
+          
+          {/* Bento Grid */}
+          <div className="reveal" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.8fr) minmax(0, 1fr)', gap: '1.5rem', height: '500px' }}>
+            {/* Main Feature */}
+            <div style={{ 
+                position: 'relative', 
+                borderRadius: '16px', 
+                overflow: 'hidden', 
+                boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+                border: '1px solid rgba(255,255,255,0.6)',
+                transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-8px) scale(1.02)'; e.currentTarget.style.boxShadow = '0 20px 50px rgba(0,0,0,0.15)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0) scale(1)'; e.currentTarget.style.boxShadow = '0 10px 40px rgba(0,0,0,0.1)'; }}
+            >
+              <ImageWithLightbox src="/thumbnails/Hawa Mahal.png" alt="Hawa Mahal" className="monument-img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(21,58,48,0.9) 0%, transparent 60%)' }} />
+              <div style={{ position: 'absolute', bottom: '2rem', left: '2rem', color: '#fff' }}>
+                <div style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: '#F6F8F7', opacity: 0.8, marginBottom: '0.2rem' }}>Iconic Landmark</div>
+                <div style={{ fontSize: '1.8rem', fontWeight: 700, fontFamily: "'Playfair Display', serif", marginBottom: '0.5rem' }}>Hawa Mahal</div>
+                <div style={{ fontSize: '0.9rem', color: '#c1dcd5', maxWidth: '400px' }}>The iconic Palace of Winds, featuring 953 intricate pink sandstone windows designed for royal ladies.</div>
+              </div>
+            </div>
+
+            {/* Stacked Features */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              <div style={{ 
+                  position: 'relative', 
+                  borderRadius: '16px', 
+                  overflow: 'hidden', 
+                  flex: 1, 
+                  boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
+                  border: '1px solid rgba(255,255,255,0.6)',
+                  transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease'
+                }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-6px) scale(1.02)'; e.currentTarget.style.boxShadow = '0 16px 40px rgba(0,0,0,0.15)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0) scale(1)'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(0,0,0,0.08)'; }}
+              >
+                <ImageWithLightbox src="/thumbnails/Amber Fort.png" alt="Amer Fort" className="monument-img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(21,58,48,0.8) 0%, transparent 70%)' }} />
+                <div style={{ position: 'absolute', bottom: '1.5rem', left: '1.5rem', color: '#fff' }}>
+                  <div style={{ fontSize: '1.4rem', fontWeight: 700, fontFamily: "'Playfair Display', serif" }}>Amer Fort</div>
+                  <div style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: '#c1dcd5' }}>Hilltop Citadel</div>
                 </div>
+              </div>
+
+              <div style={{ 
+                  position: 'relative', 
+                  borderRadius: '16px', 
+                  overflow: 'hidden', 
+                  flex: 1, 
+                  boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
+                  border: '1px solid rgba(255,255,255,0.6)',
+                  transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease'
+                }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-6px) scale(1.02)'; e.currentTarget.style.boxShadow = '0 16px 40px rgba(0,0,0,0.15)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0) scale(1)'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(0,0,0,0.08)'; }}
+              >
+                <ImageWithLightbox src="/thumbnails/City Palace.png" alt="City Palace" className="monument-img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(21,58,48,0.8) 0%, transparent 70%)' }} />
+                <div style={{ position: 'absolute', bottom: '1.5rem', left: '1.5rem', color: '#fff' }}>
+                  <div style={{ fontSize: '1.4rem', fontWeight: 700, fontFamily: "'Playfair Display', serif" }}>City Palace</div>
+                  <div style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: '#c1dcd5' }}>Royal Residence</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── EXPLORE (EXPERIENCES) ── */}
+      <section id="explore" className="section-bg" style={{ background: '#EEF2F1' }}>
+        <div className="container">
+          <div className="reveal" style={{ textAlign: 'center', marginBottom: '4rem' }}>
+            <h2 className="section-title" style={{ color: 'var(--atlas-green)' }}>Curated <em style={{ color: 'var(--atlas-sage)' }}>Experiences</em></h2>
+            <p className="section-desc" style={{ margin: '0 auto', color: 'var(--text-muted)' }}>Immerse yourself in handpicked cultural touchpoints designed for the discerning traveler.</p>
+          </div>
+          
+          <div className="reveal" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+            {[
+              { icon: <Utensils size={24} color="var(--atlas-sage)" />, title: "Royal Dining", desc: "Exclusive culinary journeys recreating historical feasts of the Maharajas." },
+              { icon: <Coffee size={24} color="var(--atlas-sage)" />, title: "Artisan Workshops", desc: "Private sessions with master craftsmen of block printing and blue pottery." },
+              { icon: <MapPin size={24} color="var(--atlas-sage)" />, title: "Night Heritage Walks", desc: "Discover illuminated monuments and quiet courtyards after twilight." }
+            ].map(item => (
+              <div key={item.title} style={{ background: '#fff', borderRadius: '12px', padding: '2.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.03)', transition: 'transform 0.3s ease' }} 
+                   onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'}
+                   onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
+                <div style={{ marginBottom: '1.5rem' }}>{item.icon}</div>
+                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.4rem', color: 'var(--atlas-green)', marginBottom: '0.8rem' }}>{item.title}</h3>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── EXPLORE ── */}
-      <section id="explore" className="section-bg">
-        <div className="section-bg-gradient" style={{ background: 'linear-gradient(160deg,rgba(18,14,8,0.97)0%,rgba(13,22,20,0.93)100%)' }} />
+      {/* ── TABS (LOCAL DISCOVERIES) ── */}
+      <section id="local-discoveries" className="section-bg" style={{ background: 'var(--atlas-pure)' }}>
         <div className="container">
           <div className="reveal" style={{ marginBottom: '2rem' }}>
-            <div className="section-label">✦ Eat, Shop & Unwind</div>
-            <h2 className="section-title">Explore <em>Jaipur&apos;s Flavours</em></h2>
-            <p className="section-desc">From centuries-old bazaars to specialty coffee roasters — the city rewards every wanderer.</p>
+            <h2 className="section-title" style={{ color: 'var(--atlas-green)' }}>Eat, Shop <em style={{ color: 'var(--atlas-sage)' }}>& Unwind</em></h2>
+            <p className="section-desc" style={{ color: 'var(--text-muted)' }}>From centuries-old bazaars to specialty coffee roasters — the city rewards every wanderer.</p>
           </div>
           <div className="tabs reveal">
             <button className="tab active" onClick={() => switchTab('cafes')} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Coffee size={16} /> Cafés</button>
@@ -157,7 +226,9 @@ export default function HomePage() {
               { img: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&q=80', cat: <><Coffee size={12}/> Heritage Café</>, name: 'Café Palladio', info: 'A jaw-dropping Indo-Italian space inside a 300-year-old haveli with hand-painted murals.', tags: ['Heritage', 'Design'], q: 'Cafe+Palladio+Jaipur' },
             ].map(({ img, cat, name, info, tags, q }) => (
               <div className="place-card reveal" key={name}>
-                <ImageWithLightbox src={img} alt={name} className="place-img" />
+                <div className="place-img-container">
+                  <ImageWithLightbox src={img} alt={name} className="place-img" />
+                </div>
                 <div className="place-body">
                   <div className="place-category">{cat}</div>
                   <div className="place-name">{name}</div>
@@ -180,7 +251,9 @@ export default function HomePage() {
               { img: 'https://images.unsplash.com/photo-1567337710282-00832b415979?w=600&q=80', cat: <><Utensils size={12}/> Traditional</>, name: 'Handi Restaurant', info: 'Jaipur institution for authentic Rajasthani dal baati churma and clay oven specialties.', tags: ['Authentic', 'Folk music'], q: 'Handi+Restaurant+Jaipur' },
             ].map(({ img, cat, name, info, tags, q }) => (
               <div className="place-card reveal" key={name}>
-                <ImageWithLightbox src={img} alt={name} className="place-img" />
+                <div className="place-img-container">
+                  <ImageWithLightbox src={img} alt={name} className="place-img" />
+                </div>
                 <div className="place-body">
                   <div className="place-category">{cat}</div>
                   <div className="place-name">{name}</div>
@@ -203,7 +276,9 @@ export default function HomePage() {
               { img: 'https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?w=600&q=80', cat: <><ShoppingBag size={12}/> Curated</>, name: 'Anokhi Store', info: 'Iconic brand for hand block-printed garments. Every piece is ethically made by local artisans.', tags: ['Ethical', 'Modern'], q: 'Anokhi+Store+Jaipur' },
             ].map(({ img, cat, name, info, tags, q }) => (
               <div className="place-card reveal" key={name}>
-                <ImageWithLightbox src={img} alt={name} className="place-img" />
+                <div className="place-img-container">
+                  <ImageWithLightbox src={img} alt={name} className="place-img" />
+                </div>
                 <div className="place-body">
                   <div className="place-category">{cat}</div>
                   <div className="place-name">{name}</div>
@@ -232,15 +307,15 @@ export default function HomePage() {
           </div>
           <div className="ride-grid">
             {[
-              { icon: <Bike size={40} color="var(--gold)" />, name: 'Rapido', desc: "India's fastest bike taxi. Perfect for short hops through Jaipur's Old City lanes.", href: 'https://rapido.bike', cls: 'btn-gold', label: 'Open App' },
-              { icon: <CarTaxiFront size={40} color="var(--teal)" />, name: 'OLA Cabs', desc: 'Book autos, minis, or SUVs. Strong coverage around Railway Stations and major tourist zones.', href: 'https://olacabs.com', cls: 'btn-teal', label: 'Open App' },
-              { icon: <Car size={40} color="var(--terracotta-light)" />, name: 'Uber', desc: 'Reliable cab booking with fare transparency. Uber Auto and UberGo are popular choices.', href: 'https://uber.com', cls: 'btn-primary', label: 'Open App' },
+              { icon: <Bike size={40} color="var(--gold)" />, name: 'Rapido', desc: "India's fastest bike taxi. Perfect for short hops through Jaipur's Old City lanes.", href: 'https://rapido.bike', cls: 'btn-primary', label: 'Open App' },
+              { icon: <CarTaxiFront size={40} color="var(--atlas-sage)" />, name: 'OLA Cabs', desc: 'Book autos, minis, or SUVs. Strong coverage around Railway Stations and major tourist zones.', href: 'https://olacabs.com', cls: 'btn-primary', label: 'Open App' },
+              { icon: <Car size={40} color="var(--atlas-sage)" />, name: 'Uber', desc: 'Reliable cab booking with fare transparency. Uber Auto and UberGo are popular choices.', href: 'https://uber.com', cls: 'btn-primary', label: 'Open App' },
             ].map(({ icon, name, desc, href, cls, label }) => (
-              <div className="ride-card reveal" key={name}>
+              <div className="ride-card reveal" key={name} style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--atlas-pure)', borderRadius: '16px', padding: '2rem', boxShadow: '0 8px 30px rgba(0,0,0,0.06)' }}>
                 <div className="ride-icon" style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>{icon}</div>
-                <div className="ride-name">{name}</div>
-                <div className="ride-desc">{desc}</div>
-                <a href={href} target="_blank" rel="noreferrer" className={`btn ${cls}`} style={{ width: '100%', justifyContent: 'center' }}>{label}</a>
+                <div className="ride-name" style={{ fontSize: '1.5rem', fontFamily: "'Playfair Display', serif", color: 'var(--atlas-green)', fontWeight: 700, marginBottom: '0.5rem' }}>{name}</div>
+                <div className="ride-desc" style={{ fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '1.5rem' }}>{desc}</div>
+                <a href={href} target="_blank" rel="noreferrer" className={`btn ${cls}`} style={{ width: '100%', justifyContent: 'center', marginTop: 'auto' }}>{label}</a>
               </div>
             ))}
           </div>
@@ -248,25 +323,24 @@ export default function HomePage() {
       </section>
 
       {/* ── MAP & HEATMAP ── */}
-      <section id="map-section" className="section-bg">
-        <div className="section-bg-gradient" style={{ background: 'linear-gradient(160deg,rgba(20,36,32,0.97)0%,rgba(13,22,20,0.93)100%)' }} />
-        <div className="container">
+      <section id="map-section" className="section-bg" style={{ background: '#FFFFFF' }}>
+        <div className="container" style={{ position: 'relative', zIndex: 10 }}>
           <div className="reveal" style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <div className="section-label">✦ Live Interactions</div>
-            <h2 className="section-title">Jaipur <em>Heatmap</em></h2>
-            <p className="section-desc" style={{ margin: '0 auto' }}>Watch in real-time as travellers explore the monuments of the Pink City.</p>
+            <h2 className="section-title" style={{ color: 'var(--atlas-green)' }}>Jaipur <em style={{ color: 'var(--atlas-sage)' }}>Heatmap</em></h2>
+            <p className="section-desc" style={{ margin: '0 auto', color: 'var(--text-muted)' }}>Watch in real-time as travellers explore the monuments of the Pink City.</p>
           </div>
           <div className="reveal">
             <HeatMap user={user} />
           </div>
         </div>
       </section>
-      <LanguageTranslator />
+      <LiveTranslator />
+      <ChatBot />
 
       {/* ── FOOTER ── */}
       <footer>
-        <div className="footer-logo">VibeGuide</div>
-        <div className="footer-tagline">Curating the soul of Jaipur, one discovery at a time</div>
+        <div className="footer-logo">ATLAS</div>
+        <div className="footer-tagline">Curating the sovereign journey, one discovery at a time</div>
         <div className="ornament" style={{ marginBottom: '2rem' }}>
           <div className="ornament-line" /><div className="ornament-diamond" /><div className="ornament-line rev" />
         </div>
@@ -278,7 +352,7 @@ export default function HomePage() {
           <Link href="/route">Route Planner</Link>
           <Link href="/login">Sign In</Link>
         </div>
-        <div className="footer-copy">© 2025 VibeGuide · Made with ♥ for travellers in Rajasthan</div>
+        <div className="footer-copy">© 2025 ATLAS · Made with ♥ for travellers in Rajasthan</div>
       </footer>
 
       <WeatherWidget />
@@ -335,6 +409,15 @@ export default function HomePage() {
         }
         .hero-cta { display: flex; gap: 1rem; justify-content: center; }
 
+        .glowing-slogan {
+          animation: sloganGlow 3s infinite alternate;
+        }
+
+        @keyframes sloganGlow {
+          from { box-shadow: 0 0 15px rgba(255,255,255,0.2); text-shadow: 0 0 5px rgba(255,255,255,0.4); }
+          to { box-shadow: 0 0 25px rgba(255,255,255,0.6); text-shadow: 0 0 15px rgba(255,255,255,0.9); }
+        }
+
         /* Monuments */
         #monuments { background:var(--bg-deep); }
         .monuments-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem; }
@@ -358,15 +441,17 @@ export default function HomePage() {
         .tab.active { color:var(--gold); }
         .tab.active::after { transform:scaleX(1); }
         .tab-panel { display:none; }
-        .tab-panel.active { display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem; }
-        .place-card { background:rgba(20,36,32,0.45);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(59,167,143,0.15);border-radius:12px;overflow:hidden;transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s; }
-        .place-card:hover { transform:translateY(-6px);border-color:rgba(59,167,143,0.45);box-shadow:0 12px 40px rgba(59,167,143,0.12),0 0 0 1px rgba(59,167,143,0.1); }
-        .place-body { padding:1.2rem; }
-        .place-category { font-size:0.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--terracotta-light);margin-bottom:0.4rem; }
-        .place-name { font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:0.4rem; }
-        .place-info { font-size:0.8rem;color:var(--text-muted);line-height:1.5;margin-bottom:0.8rem; }
-        .place-tags { display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:1rem; }
-        .place-tag { font-size:0.65rem;padding:0.2rem 0.6rem;border-radius:2px;background:rgba(59,167,143,0.08);color:var(--gold);border:1px solid rgba(59,167,143,0.2);letter-spacing:1px; }
+        .tab-panel.active { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; align-items: stretch; }
+        .place-card { display: flex; flex-direction: column; background: #ffffff; border: 1px solid rgba(21, 58, 48, 0.1); border-radius: 20px; overflow: hidden; transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
+        .place-card:hover { transform: translateY(-8px); border-color: var(--atlas-sage); box-shadow: 0 20px 50px rgba(21, 58, 48, 0.12); }
+        .place-img-container { width: 100%; height: 260px; overflow: hidden; background: #f0f0f0; }
+        .place-body { padding: 1.8rem; flex: 1; display: flex; flex-direction: column; }
+        .place-category { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--atlas-green); opacity: 0.7; margin-bottom: 0.6rem; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+        .place-name { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--atlas-green); font-weight: 700; margin-bottom: 0.8rem; }
+        .place-info { font-size: 0.95rem; color: #4A5D57; lineHeight: 1.7; margin-bottom: 1.5rem; }
+        .place-tags { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 2rem; }
+        .place-tag { font-size: 0.65rem; padding: 0.3rem 0.8rem; border-radius: 6px; background: #F1F5F4; color: var(--atlas-green); border: 1px solid rgba(21, 58, 48, 0.1); letter-spacing: 0.5px; font-weight: 500; }
+        .place-actions { margin-top: auto; }
 
         /* Ride */
         #ride { background:var(--bg-deep); }

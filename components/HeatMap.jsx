@@ -19,54 +19,73 @@ export default function HeatMap({ user }) {
   useEffect(() => {
     // Only initialize map on client side
     if (typeof window === 'undefined' || !mapContainerRef.current) return;
+    
+    // Safety check: if the container already has a Leaflet ID, it's already bound
+    if (mapContainerRef.current._leaflet_id) return;
     if (mapInstanceRef.current) return;
 
+    let map = null;
+
     // Dynamically import Leaflet so it doesn't break SSR
-    import('leaflet').then((L) => {
+    import('leaflet').then((module) => {
+      const L = module.default || module;
+      if (!mapContainerRef.current || mapContainerRef.current._leaflet_id) return;
+
+      // Some Leaflet plugins expect L to be on the window
+      window.L = L;
+
       import('leaflet.heat').then(() => {
-        // Initialize Map
-        const map = L.map(mapContainerRef.current, {
-          center: [26.9124, 75.7873], // Jaipur, Rajasthan
-          zoom: 13,
-          zoomControl: true,
-        });
+        if (!mapContainerRef.current || mapContainerRef.current._leaflet_id) return;
 
-        // Use a sleek dark-themed OpenStreetMap tile layer (CartoDB Dark Matter)
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> contributors',
-          subdomains: 'abcd',
-          maxZoom: 19,
-        }).addTo(map);
+        try {
+          // Initialize Map
+          map = L.map(mapContainerRef.current, {
+            center: [26.9124, 75.7873], // Jaipur, Rajasthan
+            zoom: 13,
+            zoomControl: true,
+          });
 
-        mapInstanceRef.current = map;
+          // Use a sleek dark-themed OpenStreetMap tile layer (CartoDB Dark Matter)
+          L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> contributors',
+            subdomains: 'abcd',
+            maxZoom: 19,
+          }).addTo(map);
 
-        // Initialize empty Heatmap Layer
-        heatmapLayerRef.current = L.heatLayer([], {
-          radius: 25,
-          blur: 15,
-          maxZoom: 17,
-          gradient: {
-            0.0: 'rgba(0,0,0,0)',
-            0.3: '#00c850',
-            0.5: '#ffe600',
-            0.7: '#ff5000',
-            1.0: '#ff0000',
+          mapInstanceRef.current = map;
+
+          // Initialize Heatmap Layer
+          if (L.heatLayer) {
+            heatmapLayerRef.current = L.heatLayer([], {
+              radius: 25,
+              blur: 15,
+              maxZoom: 17,
+              gradient: {
+                0.0: 'rgba(0,0,0,0)',
+                0.3: '#00c850',
+                0.5: '#ffe600',
+                0.7: '#ff5000',
+                1.0: '#ff0000',
+              }
+            });
           }
-        });
 
-        // Refresh data when map is dragged or zoomed
-        map.on('moveend', () => {
-          if (heatmapOn) fetchAndUpdateHeatmap();
-        });
+          // Refresh data when map is dragged or zoomed
+          map.on('moveend', () => {
+            if (heatmapOn) fetchAndUpdateHeatmap();
+          });
+        } catch (e) {
+          console.error("Map initialization failed:", e);
+        }
       });
     });
 
     return () => {
-       if (trackingIntervalRef.current) clearInterval(trackingIntervalRef.current);
-       if (mapInstanceRef.current) {
-         mapInstanceRef.current.remove();
-         mapInstanceRef.current = null;
-       }
+      if (trackingIntervalRef.current) clearInterval(trackingIntervalRef.current);
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
     };
   }, []);
 

@@ -50,7 +50,7 @@ export default function WeatherWidget() {
     <div 
       style={{
         position: 'fixed',
-        bottom: '2rem',
+        top: '2rem',
         right: '2rem',
         zIndex: 100,
         fontFamily: "'Outfit',sans-serif",
@@ -61,20 +61,20 @@ export default function WeatherWidget() {
       {/* Expanded Card */}
       <div style={{
         position: 'absolute',
-        bottom: '100%',
+        top: '100%',
         right: 0,
-        marginBottom: '1rem',
-        background: 'rgba(13,22,20,0.95)',
+        marginTop: '1rem',
+        background: 'rgba(255,255,255,0.95)',
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
-        border: '1px solid rgba(59,167,143,0.3)',
+        border: '1px solid rgba(21, 58, 48, 0.1)',
         borderRadius: '16px',
         padding: '1.5rem',
         width: 'max-content',
-        boxShadow: '0 12px 40px rgba(0,0,0,0.5)',
+        boxShadow: '0 12px 40px rgba(0,0,0,0.1)',
         opacity: isHovered ? 1 : 0,
         visibility: isHovered ? 'visible' : 'hidden',
-        transform: isHovered ? 'translateY(0)' : 'translateY(10px)',
+        transform: isHovered ? 'translateY(0)' : 'translateY(-10px)',
         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         pointerEvents: isHovered ? 'auto' : 'none',
         display: 'flex',
@@ -84,7 +84,7 @@ export default function WeatherWidget() {
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.8rem' }}>
           <div>
-            <div style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '0.2rem' }}>Jaipur, Rajasthan</div>
+            <div style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--atlas-sage)', marginBottom: '0.2rem' }}>Jaipur, Rajasthan</div>
             <div style={{ fontSize: '1.2rem', fontWeight: 600, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <Icon size={20} color={color} /> {label}
             </div>
@@ -126,7 +126,7 @@ export default function WeatherWidget() {
       >
         <Icon 
           size={42} 
-          color={color === '#facc15' ? '#fde047' : '#ffffff'} 
+          color={color === '#facc15' ? '#f59e0b' : '#ffffff'} 
           strokeWidth={2} 
         />
       </div>
