@@ -113,7 +113,7 @@ export default function HeroCanvas() {
             fontFamily: "'Dancing Script', cursive", fontSize: '1.1rem', letterSpacing: '2px',
             padding: '0.35rem 1.2rem', borderRadius: '2px', marginBottom: '1.5rem',
             animation: 'fadeDown 1s ease 0.2s both',
-          }}>✦ VibeGuide — Your Jaipur Travel Companion ✦</div>
+          }}>✦ VibeGuide — Your Global Travel Companion ✦</div>
 
           <h1 style={{
             fontFamily: "'Dancing Script', cursive",
@@ -126,7 +126,7 @@ export default function HeroCanvas() {
               display: 'block',
               background: 'linear-gradient(135deg, var(--gold-light) 0%, var(--terracotta-light) 60%, var(--maroon-light) 100%)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontStyle: 'italic',
-            }}>Jaipur</span>
+            }}>The World</span>
           </h1>
 
           <p style={{
@@ -135,17 +135,28 @@ export default function HeroCanvas() {
             color: 'var(--sand)', margin: '1.2rem 0 2.5rem', opacity: 0.85,
             animation: 'fadeDown 1s ease 0.6s both',
           }}>
-            Your royal guide to Jaipur&apos;s legendary forts, living bazaars, hidden cafés &amp; golden sunsets of Rajasthan
+            Your AI-powered passport to legendary wonders, vibrant cultures, hidden cafés, &amp; bespoke itineraries
           </p>
 
-          <div style={{
-            display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap',
-            animation: 'fadeDown 1s ease 0.8s both', pointerEvents: 'all',
+          <form action="/route" method="GET" style={{
+            display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap',
+            animation: 'fadeDown 1s ease 0.8s both', pointerEvents: 'all', maxWidth: '500px', margin: '0 auto'
           }}>
-            <a href="#monuments" className="btn btn-primary">⬡ Iconic Monuments</a>
-            <a href="#explore" className="btn btn-gold">☕ Cafés &amp; Bazaars</a>
-            <a href="/route" className="btn btn-ghost">🗺 Plan Your Route</a>
-          </div>
+            <input 
+              type="text" 
+              name="dest" 
+              placeholder="e.g. Paris, Tokyo, New York..." 
+              style={{
+                flex: 1, minWidth: '200px', padding: '1rem 1.5rem', borderRadius: '4px',
+                border: '1px solid rgba(59,167,143,0.3)', background: 'rgba(13,22,20,0.5)', 
+                color: '#fff', fontSize: '1.1rem', outline: 'none', backdropFilter: 'blur(5px)'
+              }}
+              required
+            />
+            <button type="submit" className="btn btn-gold" style={{ padding: '1rem 2rem', border: 'none', cursor: 'pointer' }}>
+              ✦ Generate AI Trip
+            </button>
+          </form>
         </div>
 
         {/* Scroll indicator */}
@@ -156,8 +167,8 @@ export default function HeroCanvas() {
         }}>
           <span style={{ fontSize: '0.65rem', letterSpacing: '3px', color: 'var(--gold)', textTransform: 'uppercase' }}>Scroll</span>
           <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
-            <rect x="1" y="1" width="14" height="22" rx="7" stroke="#D4AF37" strokeWidth="1.5" />
-            <circle cx="8" cy="7" r="2" fill="#D4AF37">
+            <rect x="1" y="1" width="14" height="22" rx="7" stroke="#3BA78F" strokeWidth="1.5" />
+            <circle cx="8" cy="7" r="2" fill="#3BA78F">
               <animate attributeName="cy" values="7;15;7" dur="1.2s" repeatCount="indefinite" />
             </circle>
           </svg>

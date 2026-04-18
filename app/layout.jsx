@@ -1,13 +1,15 @@
 import './globals.css';
+import { Providers } from '@/components/Providers';
 
 export const metadata = {
-  title: 'VibeGuide — Jaipur, The Pink City',
-  description: "Your royal guide to Jaipur's legendary forts, living bazaars, hidden cafés and golden sunsets of Rajasthan.",
+  title: 'VibeGuide — Your Global Travel Companion',
+  description: "Discover the world's legendary monuments, vibrant cultures, hidden cafés, and create custom AI itineraries.",
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
@@ -16,7 +18,9 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body suppressHydrationWarning>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

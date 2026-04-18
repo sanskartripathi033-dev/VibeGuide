@@ -41,8 +41,8 @@ export default function LanguageTranslator() {
           margin: 0 !important;
           padding: 0.5rem !important;
           border-radius: 4px !important;
-          border: 1px solid rgba(212,175,55,0.3) !important;
-          background: rgba(13,10,7,0.95) !important;
+          border: 1px solid rgba(59,167,143,0.3) !important;
+          background: rgba(13,22,20,0.95) !important;
           color: var(--gold) !important;
           font-size: 0.8rem !important;
           outline: none !important;
@@ -67,9 +67,9 @@ export default function LanguageTranslator() {
         display: 'inline-flex',
         alignItems: 'center',
         gap: '0.6rem',
-        background: 'rgba(13,10,7,0.85)',
+        background: 'rgba(13,22,20,0.85)',
         backdropFilter: 'blur(10px)',
-        border: '1px solid rgba(212,175,55,0.3)',
+        border: '1px solid rgba(59,167,143,0.3)',
         borderRadius: '4px',
         padding: '0.4rem 1rem',
       }}>

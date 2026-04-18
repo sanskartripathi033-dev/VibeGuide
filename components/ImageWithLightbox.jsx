@@ -38,7 +38,7 @@ export default function ImageWithLightbox({ src, alt, className = '', style = {}
               maxHeight: '85vh',
               objectFit: 'contain',
               borderRadius: '6px',
-              boxShadow: '0 20px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(212,175,55,0.2)',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(59,167,143,0.2)',
             }}
             onClick={(e) => e.stopPropagation()} // Prevent click on image closing the lightbox immediately if we wanted, but let's let any click close it.
           />

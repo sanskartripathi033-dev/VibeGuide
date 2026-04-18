@@ -25,8 +25,8 @@ export default function HeatMap({ user }) {
       import('leaflet.heat').then(() => {
         // Initialize Map
         const map = L.map(mapContainerRef.current, {
-          center: [26.9124, 75.7873], // Jaipur
-          zoom: 13,
+          center: [20, 0], // Global View
+          zoom: 2,
           zoomControl: true,
         });
 
@@ -155,7 +155,7 @@ export default function HeatMap({ user }) {
           width: '100%',
           height: '500px',
           borderRadius: '4px',
-          border: '1px solid rgba(212,175,55,0.2)',
+          border: '1px solid rgba(59,167,143,0.2)',
           boxShadow: '0 8px 40px rgba(0,0,0,0.6)',
           background: '#0a0a0a',
           zIndex: 1 // Leaflet needs low z-index so controls can go above
@@ -179,9 +179,9 @@ export default function HeatMap({ user }) {
             display: 'flex', alignItems: 'center', gap: '0.5rem',
             background: heatmapOn
               ? 'linear-gradient(135deg,rgba(255,80,0,0.9),rgba(255,0,0,0.85))'
-              : 'rgba(13,10,7,0.88)',
+              : 'rgba(13,22,20,0.88)',
             backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(212,175,55,0.35)',
+            border: '1px solid rgba(59,167,143,0.35)',
             borderRadius: '4px',
             padding: '0.7rem 1.2rem',
             color: heatmapOn ? '#fff' : 'var(--gold)',
@@ -213,9 +213,9 @@ export default function HeatMap({ user }) {
             display: 'flex', alignItems: 'center', gap: '0.5rem',
             background: trackingOn
               ? 'linear-gradient(135deg,rgba(0,122,122,0.9),rgba(0,77,77,0.85))'
-              : 'rgba(13,10,7,0.88)',
+              : 'rgba(13,22,20,0.88)',
             backdropFilter: 'blur(10px)',
-            border: `1px solid ${trackingOn ? 'rgba(0,200,150,0.5)' : 'rgba(212,175,55,0.35)'}`,
+            border: `1px solid ${trackingOn ? 'rgba(0,200,150,0.5)' : 'rgba(59,167,143,0.35)'}`,
             borderRadius: '4px',
             padding: '0.7rem 1.2rem',
             color: trackingOn ? '#00ffaa' : 'var(--text-muted)',
@@ -235,9 +235,9 @@ export default function HeatMap({ user }) {
         {/* Status Message */}
         {statusMsg && (
           <div style={{
-            background: 'rgba(13,10,7,0.88)',
+            background: 'rgba(13,22,20,0.88)',
             backdropFilter: 'blur(8px)',
-            border: '1px solid rgba(212,175,55,0.2)',
+            border: '1px solid rgba(59,167,143,0.2)',
             borderRadius: '4px',
             padding: '0.5rem 1rem',
             color: 'var(--sand)',
@@ -252,28 +252,28 @@ export default function HeatMap({ user }) {
         position: 'absolute',
         top: '1rem',
         right: '1rem',
-        background: 'rgba(13,10,7,0.85)',
+        background: 'rgba(13,22,20,0.85)',
         backdropFilter: 'blur(10px)',
-        border: '1px solid rgba(212,175,55,0.3)',
+        border: '1px solid rgba(59,167,143,0.3)',
         borderRadius: '4px',
         padding: '1rem 1.5rem',
         zIndex: 10,
         pointerEvents: 'none',
       }}>
         <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.1rem', color: 'var(--gold)', marginBottom: '0.2rem' }}>
-          {currentCoords ? '📍 Your Location' : '📍 Jaipur, Rajasthan'}
+          {currentCoords ? '📍 Your Location' : '📍 Global Tracking'}
         </h3>
         <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
           {currentCoords 
             ? `${currentCoords.lat.toFixed(4)}° N, ${currentCoords.lng.toFixed(4)}° E`
-            : '26.9124° N, 75.7873° E'}
+            : 'Tracking worldwide active'}
         </p>
       </div>
 
       {/* Ensure map controls don't overlap wildly */}
       <style>{`
-        .leaflet-control-zoom { border: 1px solid rgba(212,175,55,0.2) !important; border-radius: 4px !important; overflow: hidden; }
-        .leaflet-control-zoom a { background: rgba(13,10,7,0.85) !important; color: #D4AF37 !important; border-bottom: 1px solid rgba(212,175,55,0.1) !important; }
+        .leaflet-control-zoom { border: 1px solid rgba(59,167,143,0.2) !important; border-radius: 4px !important; overflow: hidden; }
+        .leaflet-control-zoom a { background: rgba(13,22,20,0.85) !important; color: #3BA78F !important; border-bottom: 1px solid rgba(59,167,143,0.1) !important; }
         .leaflet-control-zoom a:hover { background: rgba(26,20,14,0.9) !important; }
         .leaflet-container { font-family: 'Outfit', sans-serif; }
       `}</style>

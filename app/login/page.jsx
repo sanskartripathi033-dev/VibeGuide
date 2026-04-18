@@ -45,7 +45,7 @@ export default function LoginPage() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Dancing+Script:wght@700&family=Outfit:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap');
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        body{background:#0D0A07;font-family:'Outfit',sans-serif;overflow-x:hidden}
+        body{background:#0D1614;font-family:'Outfit',sans-serif;overflow-x:hidden}
 
         .login-wrap {
           min-height: 100vh;
@@ -74,29 +74,29 @@ export default function LoginPage() {
         .login-left:hover .login-left-bg { transform: scale(1); }
         .login-left-overlay {
           position: absolute; inset: 0;
-          background: linear-gradient(160deg, rgba(13,10,7,0.3) 0%, rgba(13,10,7,0.85) 100%);
+          background: linear-gradient(160deg, rgba(13,22,20,0.3) 0%, rgba(13,22,20,0.85) 100%);
         }
         .login-left-content { position: relative; z-index: 2; }
         .login-brand {
           font-family: 'Playfair Display', serif;
           font-size: 2.2rem; font-weight: 900; letter-spacing: 2px;
-          background: linear-gradient(135deg,#FFD700,#D98E7E);
+          background: linear-gradient(135deg,#78D59A,#3BA78F);
           -webkit-background-clip: text; -webkit-text-fill-color: transparent;
           margin-bottom: 0.4rem;
         }
         .login-brand-sub {
           font-family: 'Cormorant Garamond', serif;
-          font-style: italic; font-size: 1.1rem; color: #E5D3B3; opacity: 0.8;
+          font-style: italic; font-size: 1.1rem; color: #EEF1F0; opacity: 0.8;
           margin-bottom: 2rem;
         }
         .login-quote {
           font-family: 'Dancing Script', cursive;
-          font-size: 1.6rem; color: #D4AF37; line-height: 1.4;
+          font-size: 1.6rem; color: #78D59A; line-height: 1.4;
           margin-bottom: 0.5rem;
         }
         .login-quote-attr {
           font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase;
-          color: #A08060;
+          color: #8FBBAF;
         }
 
         /* RIGHT PANEL */
@@ -105,21 +105,21 @@ export default function LoginPage() {
           align-items: center;
           justify-content: center;
           padding: 3rem 2rem;
-          background: linear-gradient(160deg, #100c07 0%, #0d0a07 100%);
+          background: linear-gradient(160deg, #12241F 0%, #0D1614 100%);
           position: relative;
         }
         .login-right::before {
           content: '';
           position: absolute; inset: 0;
-          background: radial-gradient(ellipse at 60% 40%, rgba(212,175,55,0.04) 0%, transparent 70%);
+          background: radial-gradient(ellipse at 60% 40%, rgba(59,167,143,0.06) 0%, transparent 70%);
           pointer-events: none;
         }
 
         .login-card {
           width: 100%; max-width: 420px;
-          background: rgba(22,17,9,0.85);
+          background: rgba(20,36,32,0.85);
           backdrop-filter: blur(20px);
-          border: 1px solid rgba(212,175,55,0.18);
+          border: 1px solid rgba(59,167,143,0.18);
           border-radius: 8px;
           padding: 2.5rem;
           box-shadow: 0 20px 60px rgba(0,0,0,0.6);
@@ -130,65 +130,65 @@ export default function LoginPage() {
         .card-title {
           font-family: 'Playfair Display', serif;
           font-size: 1.8rem; font-weight: 700; margin-bottom: 0.4rem;
-          background: linear-gradient(135deg,#D4AF37,#D98E7E);
+          background: linear-gradient(135deg,#78D59A,#3BA78F);
           -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         .card-subtitle {
           font-family: 'Cormorant Garamond', serif;
-          font-size: 1rem; color: #A08060; font-style: italic; margin-bottom: 2rem;
+          font-size: 1rem; color: #8FBBAF; font-style: italic; margin-bottom: 2rem;
         }
 
         /* Tab switcher */
         .auth-tabs {
           display: flex; margin-bottom: 2rem;
-          border-bottom: 1px solid rgba(212,175,55,0.15);
+          border-bottom: 1px solid rgba(59,167,143,0.15);
         }
         .auth-tab {
           flex: 1; padding: 0.7rem 1rem;
           font-family: 'Outfit', sans-serif;
           font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase;
           background: none; border: none; cursor: pointer;
-          color: #A08060; transition: color 0.3s; position: relative;
+          color: #8FBBAF; transition: color 0.3s; position: relative;
         }
         .auth-tab::after {
           content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
-          height: 2px; background: #D4AF37; transform: scaleX(0);
+          height: 2px; background: #3BA78F; transform: scaleX(0);
           transition: transform 0.3s;
         }
-        .auth-tab.active { color: #D4AF37; }
+        .auth-tab.active { color: #3BA78F; }
         .auth-tab.active::after { transform: scaleX(1); }
 
         /* Form */
         .form-group { margin-bottom: 1.2rem; }
         .form-label {
           display: block; font-size: 0.7rem; letter-spacing: 2.5px;
-          text-transform: uppercase; color: #A08060; margin-bottom: 0.4rem;
+          text-transform: uppercase; color: #8FBBAF; margin-bottom: 0.4rem;
         }
         .form-input {
           width: 100%; padding: 0.85rem 1rem;
-          background: rgba(13,10,7,0.7);
-          border: 1px solid rgba(212,175,55,0.2);
+          background: rgba(13,22,20,0.7);
+          border: 1px solid rgba(59,167,143,0.2);
           border-radius: 4px;
-          color: #F0E8DC; font-family: 'Outfit', sans-serif; font-size: 0.9rem;
+          color: #EEF1F0; font-family: 'Outfit', sans-serif; font-size: 0.9rem;
           transition: border-color 0.3s, box-shadow 0.3s;
           outline: none;
         }
         .form-input:focus {
-          border-color: rgba(212,175,55,0.6);
-          box-shadow: 0 0 0 3px rgba(212,175,55,0.08);
+          border-color: rgba(59,167,143,0.6);
+          box-shadow: 0 0 0 3px rgba(59,167,143,0.08);
         }
-        .form-input::placeholder { color: #4a3a2a; }
+        .form-input::placeholder { color: #436A5E; }
 
         .submit-btn {
           width: 100%; padding: 0.9rem;
-          background: linear-gradient(135deg, #800000, #8E4432);
-          color: #E5D3B3;
+          background: linear-gradient(135deg, #236757, #3BA78F);
+          color: #EEF1F0;
           font-family: 'Outfit', sans-serif; font-size: 0.85rem;
           font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
-          border: none; border-radius: 4px; cursor: pointer;
+          border: none; border-radius: 9999px; cursor: pointer;
           position: relative; overflow: hidden;
           transition: transform 0.25s, box-shadow 0.25s;
-          box-shadow: 0 4px 20px rgba(128,0,0,0.5);
+          box-shadow: 0 6px 15px rgba(35,103,87,0.3);
           margin-top: 0.5rem;
         }
         .submit-btn::before {
@@ -198,7 +198,7 @@ export default function LoginPage() {
           transition: transform 0.4s;
         }
         .submit-btn:hover::before { transform: translateX(110%) skewX(-15deg); }
-        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(192,92,66,0.5); }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(59,167,143,0.4); }
         .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
         .error-msg {
@@ -214,28 +214,28 @@ export default function LoginPage() {
 
         .divider {
           display: flex; align-items: center; gap: 0.8rem;
-          margin: 1.5rem 0; color: #4a3a2a; font-size: 0.75rem; letter-spacing: 2px;
+          margin: 1.5rem 0; color: #8FBBAF; font-size: 0.75rem; letter-spacing: 2px;
         }
         .divider::before,.divider::after {
           content: ''; flex: 1; height: 1px;
-          background: rgba(212,175,55,0.12);
+          background: rgba(59,167,143,0.12);
         }
 
         .back-link {
           display: block; text-align: center; margin-top: 1.5rem;
-          font-size: 0.8rem; color: #A08060; text-decoration: none;
+          font-size: 0.8rem; color: #8FBBAF; text-decoration: none;
           letter-spacing: 1px; transition: color 0.3s;
         }
-        .back-link:hover { color: #D4AF37; }
+        .back-link:hover { color: #3BA78F; }
 
         /* Ornament */
         .card-ornament {
           display: flex; align-items: center; gap: 0.6rem;
           margin-bottom: 1.5rem;
         }
-        .card-orn-line { flex:1; height:1px; background: linear-gradient(to right, transparent, rgba(212,175,55,0.3)); }
-        .card-orn-line.rev { background: linear-gradient(to left, transparent, rgba(212,175,55,0.3)); }
-        .card-orn-diamond { width:6px;height:6px;background:#D4AF37;transform:rotate(45deg); }
+        .card-orn-line { flex:1; height:1px; background: linear-gradient(to right, transparent, rgba(59,167,143,0.3)); }
+        .card-orn-line.rev { background: linear-gradient(to left, transparent, rgba(59,167,143,0.3)); }
+        .card-orn-diamond { width:6px;height:6px;background:#3BA78F;transform:rotate(45deg); }
 
         @media(max-width:768px){
           .login-wrap { grid-template-columns:1fr; }

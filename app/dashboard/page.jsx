@@ -39,12 +39,12 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <div style={{
-        minHeight: '100vh', background: '#0D0A07', display: 'flex',
+        minHeight: '100vh', background: '#0D1614', display: 'flex',
         alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '1rem',
         fontFamily: 'Outfit, sans-serif',
       }}>
         <div style={{ fontSize: '2rem', animation: 'spin 1.5s linear infinite' }}>✦</div>
-        <p style={{ color: '#A08060', letterSpacing: '3px', textTransform: 'uppercase', fontSize: '0.8rem' }}>Loading your dashboard…</p>
+        <p style={{ color: '#8FBBAF', letterSpacing: '3px', textTransform: 'uppercase', fontSize: '0.8rem' }}>Loading your dashboard…</p>
         <style>{`@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}`}</style>
       </div>
     );
@@ -64,11 +64,11 @@ export default function DashboardPage() {
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Dancing+Script:wght@700&family=Outfit:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap');
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         :root{
-          --gold:#D4AF37;--gold-light:#FFD700;--terracotta:#C05C42;
-          --terracotta-light:#D98E7E;--terracotta-dark:#8E4432;--maroon:#800000;
+          --gold:#3BA78F;--gold-light:#78D59A;--terracotta:#3BA78F;
+          --terracotta-light:#78D59A;--terracotta-dark:#236757;--maroon:#236757;
           --teal:#007A7A;--teal-dark:#004D4D;--sand:#E5D3B3;
-          --bg-deep:#0D0A07;--bg-card:#161109;--bg-card2:#1C1409;
-          --text-main:#F0E8DC;--text-muted:#A08060;
+          --bg-deep:#0D1614;--bg-card:#142420;--bg-card2:#19322B;
+          --text-main:#EEF1F0;--text-muted:#8FBBAF;
         }
         body{background:var(--bg-deep);color:var(--text-main);font-family:'Outfit',sans-serif;overflow-x:hidden}
 
@@ -76,15 +76,15 @@ export default function DashboardPage() {
 
         /* Hero banner */
         .dash-banner {
-          background: linear-gradient(135deg, #100c07 0%, #1a0d05 50%, #0d0a07 100%);
-          border-bottom: 1px solid rgba(212,175,55,0.12);
+          background: linear-gradient(135deg, #100c07 0%, #1a0d05 50%, #0D1614 100%);
+          border-bottom: 1px solid rgba(59,167,143,0.12);
           padding: 3rem 2rem;
           position: relative; overflow: hidden;
         }
         .dash-banner::before {
           content: '';
           position: absolute; inset: 0;
-          background: radial-gradient(ellipse at 80% 50%, rgba(212,175,55,0.07) 0%, transparent 60%);
+          background: radial-gradient(ellipse at 80% 50%, rgba(59,167,143,0.07) 0%, transparent 60%);
         }
         .dash-banner-inner { max-width:1200px;margin:0 auto;position:relative;z-index:1; }
         .dash-greeting { font-size:0.75rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem; }
@@ -102,11 +102,11 @@ export default function DashboardPage() {
         /* Stat cards */
         .dash-stats { max-width:1200px;margin:0 auto;padding:2.5rem 2rem;display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem; }
         .stat-card {
-          background:var(--bg-card2); border:1px solid rgba(212,175,55,0.1);
+          background:var(--bg-card2); border:1px solid rgba(59,167,143,0.1);
           border-radius:6px; padding:1.5rem;
           transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s;
         }
-        .stat-card:hover { transform:translateY(-4px);border-color:rgba(212,175,55,0.3);box-shadow:0 8px 25px rgba(0,0,0,0.4); }
+        .stat-card:hover { transform:translateY(-4px);border-color:rgba(59,167,143,0.3);box-shadow:0 8px 25px rgba(0,0,0,0.4); }
         .stat-icon { font-size:2rem;margin-bottom:0.8rem; }
         .stat-label { font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.3rem; }
         .stat-value { font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--gold); }
@@ -115,31 +115,31 @@ export default function DashboardPage() {
         /* Sections */
         .dash-section { max-width:1200px;margin:0 auto;padding:0 2rem 3rem; }
         .dash-section-title { font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.8rem; }
-        .dash-section-title span { font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.2);border-radius:2px;padding:0.2rem 0.6rem; }
+        .dash-section-title span { font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);background:rgba(59,167,143,0.08);border:1px solid rgba(59,167,143,0.2);border-radius:2px;padding:0.2rem 0.6rem; }
 
         /* Quick access cards */
         .quick-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem; }
         .quick-card {
-          background:var(--bg-card); border:1px solid rgba(212,175,55,0.08);
+          background:var(--bg-card); border:1px solid rgba(59,167,143,0.08);
           border-radius:6px; padding:1.5rem; text-decoration:none; color:inherit;
           display:flex;flex-direction:column;gap:0.5rem;
           transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s;
         }
-        .quick-card:hover { transform:translateY(-5px);border-color:rgba(212,175,55,0.35);box-shadow:0 10px 30px rgba(0,0,0,0.5); }
+        .quick-card:hover { transform:translateY(-5px);border-color:rgba(59,167,143,0.35);box-shadow:0 10px 30px rgba(0,0,0,0.5); }
         .quick-card-icon { font-size:2.2rem; }
         .quick-card-title { font-family:'Playfair Display',serif;font-size:1.1rem; }
         .quick-card-desc { font-size:0.82rem;color:var(--text-muted);line-height:1.5; }
         .quick-card-arrow { font-size:0.8rem;color:var(--gold);letter-spacing:2px;margin-top:auto; }
 
         /* Map section */
-        .dash-map { background:var(--bg-card2);border:1px solid rgba(212,175,55,0.1);border-radius:8px;padding:2rem;margin-bottom:2rem; }
+        .dash-map { background:var(--bg-card2);border:1px solid rgba(59,167,143,0.1);border-radius:8px;padding:2rem;margin-bottom:2rem; }
         .dash-map-header { display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem; }
         .live-badge { display:inline-flex;align-items:center;gap:0.4rem;padding:0.3rem 0.8rem;background:rgba(0,200,80,0.1);border:1px solid rgba(0,200,80,0.3);border-radius:20px;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:#00c850; }
         .live-dot { width:6px;height:6px;border-radius:50%;background:#00c850;animation:livepulse 1.5s infinite; }
         @keyframes livepulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
 
         /* Profile card */
-        .profile-card { background:var(--bg-card2);border:1px solid rgba(212,175,55,0.1);border-radius:6px;padding:1.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap; }
+        .profile-card { background:var(--bg-card2);border:1px solid rgba(59,167,143,0.1);border-radius:6px;padding:1.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap; }
         .profile-avatar { width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--maroon),var(--terracotta-dark));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold);flex-shrink:0; }
         .profile-info { flex:1; }
         .profile-name { font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:0.2rem; }
@@ -147,17 +147,17 @@ export default function DashboardPage() {
         .profile-joined { font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-top:0.3rem; }
 
         /* Schema download box */
-        .schema-box { background:#0a0704;border:1px solid rgba(212,175,55,0.15);border-radius:6px;padding:1.5rem;margin-top:1rem; }
-        .schema-box pre { font-size:0.78rem;color:#A08060;line-height:1.8;overflow-x:auto;white-space:pre-wrap; }
-        .schema-box code { color:#D4AF37; }
+        .schema-box { background:#0a0704;border:1px solid rgba(59,167,143,0.15);border-radius:6px;padding:1.5rem;margin-top:1rem; }
+        .schema-box pre { font-size:0.78rem;color:#8FBBAF;line-height:1.8;overflow-x:auto;white-space:pre-wrap; }
+        .schema-box code { color:#3BA78F; }
 
         .btn { display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.8rem;font-family:'Outfit',sans-serif;font-size:0.8rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;text-decoration:none;cursor:pointer;border:none;border-radius:2px;position:relative;overflow:hidden;transition:transform 0.25s,box-shadow 0.25s; }
         .btn::before { content:'';position:absolute;inset:0;background:rgba(255,255,255,0.12);transform:translateX(-110%) skewX(-15deg);transition:transform 0.4s; }
         .btn:hover::before { transform:translateX(110%) skewX(-15deg); }
         .btn:hover { transform:translateY(-2px); }
-        .btn-gold { background:linear-gradient(135deg,#FFD700,#D4AF37);color:#1a0f00;box-shadow:0 4px 20px rgba(212,175,55,0.4); }
+        .btn-gold { background:linear-gradient(135deg,#78D59A,#3BA78F);color:#1a0f00;box-shadow:0 4px 20px rgba(59,167,143,0.4); }
         .btn-ghost { background:transparent;border:1.5px solid var(--gold);color:var(--gold); }
-        .btn-danger { background:linear-gradient(135deg,#5a0000,#800000);color:#E5D3B3;box-shadow:0 4px 15px rgba(128,0,0,0.4); }
+        .btn-danger { background:linear-gradient(135deg,#5a0000,#236757);color:#E5D3B3;box-shadow:0 4px 15px rgba(128,0,0,0.4); }
 
         @media(max-width:900px){ .dash-stats{grid-template-columns:1fr 1fr} .quick-grid{grid-template-columns:1fr 1fr} }
         @media(max-width:600px){ .dash-stats{grid-template-columns:1fr} .quick-grid{grid-template-columns:1fr} }
@@ -320,8 +320,8 @@ CREATE POLICY "Public can read trails"
         </div>
 
         {/* Footer */}
-        <footer style={{ background: '#080603', borderTop: '1px solid rgba(212,175,55,0.1)', padding: '2rem', textAlign: 'center', marginTop: '2rem' }}>
-          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.5rem', fontWeight: 900, background: 'linear-gradient(135deg,#D4AF37,#D98E7E)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '0.4rem' }}>VibeGuide</div>
+        <footer style={{ background: '#080603', borderTop: '1px solid rgba(59,167,143,0.1)', padding: '2rem', textAlign: 'center', marginTop: '2rem' }}>
+          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.5rem', fontWeight: 900, background: 'linear-gradient(135deg,#3BA78F,#78D59A)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '0.4rem' }}>VibeGuide</div>
           <div style={{ fontSize: '0.75rem', color: 'rgba(160,128,96,0.4)' }}>© 2025 VibeGuide · Your Jaipur Travel Companion</div>
         </footer>
 

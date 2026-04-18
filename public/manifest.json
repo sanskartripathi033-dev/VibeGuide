@@ -1,0 +1,16 @@
+{
+  "name": "VibeGuide — Jaipur",
+  "short_name": "VibeGuide",
+  "description": "Your royal guide to Jaipur's legendary forts, living bazaars, and hidden cafés.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0D1614",
+  "theme_color": "#3BA78F",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}

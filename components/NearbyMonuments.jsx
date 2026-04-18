@@ -60,10 +60,13 @@ export default function NearbyMonuments() {
 
   return (
     <div style={{
-      background: 'var(--bg-card)',
-      border: '1px solid rgba(212,175,55,0.1)',
-      borderRadius: '8px',
+      background: 'rgba(20,36,32,0.4)',
+      backdropFilter: 'blur(20px)',
+      WebkitBackdropFilter: 'blur(20px)',
+      border: '1px solid rgba(59,167,143,0.18)',
+      borderRadius: '16px',
       padding: '2rem',
+      boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)',
     }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
@@ -73,7 +76,7 @@ export default function NearbyMonuments() {
           <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Find the closest heritage sites to your current location.</p>
         </div>
         <button onClick={locateUser} disabled={loading} style={{
-          background: 'rgba(212,175,55,0.1)', border: '1px solid var(--gold)',
+          background: 'rgba(59,167,143,0.1)', border: '1px solid var(--gold)',
           color: 'var(--gold)', padding: '0.6rem 1.2rem', borderRadius: '4px',
           fontFamily: "'Outfit',sans-serif", fontSize: '0.75rem', letterSpacing: '1px',
           textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.3s'
@@ -88,9 +91,18 @@ export default function NearbyMonuments() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
           {nearby.map((m) => (
             <div key={m.name} style={{
-              background: 'var(--bg-card2)', border: '1px solid rgba(212,175,55,0.08)',
-              padding: '1.2rem', borderRadius: '6px',
-            }}>
+              background: 'rgba(25,50,43,0.45)',
+              backdropFilter: 'blur(14px)',
+              WebkitBackdropFilter: 'blur(14px)',
+              border: '1px solid rgba(59,167,143,0.15)',
+              padding: '1.2rem',
+              borderRadius: '10px',
+              transition: 'border-color 0.3s, box-shadow 0.3s',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor='rgba(59,167,143,0.4)'; e.currentTarget.style.boxShadow='0 6px 24px rgba(59,167,143,0.12)'; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor='rgba(59,167,143,0.15)'; e.currentTarget.style.boxShadow='0 4px 16px rgba(0,0,0,0.2)'; }}
+            >
               <div style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '0.4rem' }}>
                 {m.cat}
               </div>
