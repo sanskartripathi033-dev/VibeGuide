@@ -78,7 +78,6 @@ export default function Navbar() {
         <li><Link href="/#ride">Ride</Link></li>
         <li><Link href="/route">Route</Link></li>
         <li><Link href="/#map-section">Map</Link></li>
-        <li><Link href="/#weather">Weather</Link></li>
         {user ? (
           <>
             <li><Link href="/dashboard">Dashboard</Link></li>

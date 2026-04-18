@@ -251,23 +251,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       <LanguageTranslator />
-
-      {/* ── WEATHER ── */}
-      <section id="weather" className="section-bg">
-        <div className="section-bg-gradient" style={{ background: 'linear-gradient(160deg,rgba(13,22,20,0.98)0%,rgba(18,36,30,0.95)100%)' }} />
-        <div className="container">
-          <div className="reveal" style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <div className="section-label">✦ Live Conditions</div>
-            <h2 className="section-title">Jaipur <em>Weather</em></h2>
-            <p className="section-desc" style={{ margin: '0 auto' }}>Real-time weather data to help you plan the perfect Jaipur day.</p>
-          </div>
-          <div className="reveal">
-            <WeatherWidget />
-          </div>
-        </div>
-      </section>
 
       {/* ── FOOTER ── */}
       <footer>
@@ -286,6 +270,8 @@ export default function HomePage() {
         </div>
         <div className="footer-copy">© 2025 VibeGuide · Made with ♥ for travellers in Rajasthan</div>
       </footer>
+
+      <WeatherWidget />
 
       <style jsx>{`
         .hero-animation-container {
