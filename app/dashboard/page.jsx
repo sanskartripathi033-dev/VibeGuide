@@ -1,0 +1,331 @@
+'use client';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import Navbar from '@/components/Navbar';
+import HeatMap from '@/components/HeatMap';
+import NearbyMonuments from '@/components/NearbyMonuments';
+import { supabase } from '@/lib/supabase';
+
+export default function DashboardPage() {
+  const router = useRouter();
+  const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(async ({ data, error }) => {
+      if (error || !data?.user) {
+        router.replace('/login');
+        return;
+      }
+      setUser(data.user);
+      // Fetch profile
+      const { data: pData } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', data.user.id)
+        .single();
+      setProfile(pData);
+      setLoading(false);
+    });
+  }, [router]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.replace('/');
+  };
+
+  if (loading) {
+    return (
+      <div style={{
+        minHeight: '100vh', background: '#0D0A07', display: 'flex',
+        alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '1rem',
+        fontFamily: 'Outfit, sans-serif',
+      }}>
+        <div style={{ fontSize: '2rem', animation: 'spin 1.5s linear infinite' }}>✦</div>
+        <p style={{ color: '#A08060', letterSpacing: '3px', textTransform: 'uppercase', fontSize: '0.8rem' }}>Loading your dashboard…</p>
+        <style>{`@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}`}</style>
+      </div>
+    );
+  }
+
+  const displayName = profile?.full_name || user?.email?.split('@')[0] || 'Explorer';
+  const greeting = (() => {
+    const h = new Date().getHours();
+    if (h < 12) return 'Good morning';
+    if (h < 17) return 'Good afternoon';
+    return 'Good evening';
+  })();
+
+  return (
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Dancing+Script:wght@700&family=Outfit:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap');
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        :root{
+          --gold:#D4AF37;--gold-light:#FFD700;--terracotta:#C05C42;
+          --terracotta-light:#D98E7E;--terracotta-dark:#8E4432;--maroon:#800000;
+          --teal:#007A7A;--teal-dark:#004D4D;--sand:#E5D3B3;
+          --bg-deep:#0D0A07;--bg-card:#161109;--bg-card2:#1C1409;
+          --text-main:#F0E8DC;--text-muted:#A08060;
+        }
+        body{background:var(--bg-deep);color:var(--text-main);font-family:'Outfit',sans-serif;overflow-x:hidden}
+
+        .dash-wrap { padding-top: 80px; min-height: 100vh; }
+
+        /* Hero banner */
+        .dash-banner {
+          background: linear-gradient(135deg, #100c07 0%, #1a0d05 50%, #0d0a07 100%);
+          border-bottom: 1px solid rgba(212,175,55,0.12);
+          padding: 3rem 2rem;
+          position: relative; overflow: hidden;
+        }
+        .dash-banner::before {
+          content: '';
+          position: absolute; inset: 0;
+          background: radial-gradient(ellipse at 80% 50%, rgba(212,175,55,0.07) 0%, transparent 60%);
+        }
+        .dash-banner-inner { max-width:1200px;margin:0 auto;position:relative;z-index:1; }
+        .dash-greeting { font-size:0.75rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem; }
+        .dash-name {
+          font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:900;
+          background:linear-gradient(135deg,var(--gold-light),var(--terracotta-light));
+          -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+          margin-bottom:0.4rem;
+        }
+        .dash-sub { font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-style:italic;color:var(--text-muted); }
+        .dash-meta { display:flex;gap:1.5rem;margin-top:1.5rem;flex-wrap:wrap; }
+        .dash-meta-item { display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:var(--text-muted);letter-spacing:1px; }
+        .dash-meta-dot { width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0; }
+
+        /* Stat cards */
+        .dash-stats { max-width:1200px;margin:0 auto;padding:2.5rem 2rem;display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem; }
+        .stat-card {
+          background:var(--bg-card2); border:1px solid rgba(212,175,55,0.1);
+          border-radius:6px; padding:1.5rem;
+          transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s;
+        }
+        .stat-card:hover { transform:translateY(-4px);border-color:rgba(212,175,55,0.3);box-shadow:0 8px 25px rgba(0,0,0,0.4); }
+        .stat-icon { font-size:2rem;margin-bottom:0.8rem; }
+        .stat-label { font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.3rem; }
+        .stat-value { font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--gold); }
+        .stat-sub { font-size:0.75rem;color:var(--text-muted);margin-top:0.2rem; }
+
+        /* Sections */
+        .dash-section { max-width:1200px;margin:0 auto;padding:0 2rem 3rem; }
+        .dash-section-title { font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.8rem; }
+        .dash-section-title span { font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.2);border-radius:2px;padding:0.2rem 0.6rem; }
+
+        /* Quick access cards */
+        .quick-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem; }
+        .quick-card {
+          background:var(--bg-card); border:1px solid rgba(212,175,55,0.08);
+          border-radius:6px; padding:1.5rem; text-decoration:none; color:inherit;
+          display:flex;flex-direction:column;gap:0.5rem;
+          transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s;
+        }
+        .quick-card:hover { transform:translateY(-5px);border-color:rgba(212,175,55,0.35);box-shadow:0 10px 30px rgba(0,0,0,0.5); }
+        .quick-card-icon { font-size:2.2rem; }
+        .quick-card-title { font-family:'Playfair Display',serif;font-size:1.1rem; }
+        .quick-card-desc { font-size:0.82rem;color:var(--text-muted);line-height:1.5; }
+        .quick-card-arrow { font-size:0.8rem;color:var(--gold);letter-spacing:2px;margin-top:auto; }
+
+        /* Map section */
+        .dash-map { background:var(--bg-card2);border:1px solid rgba(212,175,55,0.1);border-radius:8px;padding:2rem;margin-bottom:2rem; }
+        .dash-map-header { display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem; }
+        .live-badge { display:inline-flex;align-items:center;gap:0.4rem;padding:0.3rem 0.8rem;background:rgba(0,200,80,0.1);border:1px solid rgba(0,200,80,0.3);border-radius:20px;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:#00c850; }
+        .live-dot { width:6px;height:6px;border-radius:50%;background:#00c850;animation:livepulse 1.5s infinite; }
+        @keyframes livepulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+
+        /* Profile card */
+        .profile-card { background:var(--bg-card2);border:1px solid rgba(212,175,55,0.1);border-radius:6px;padding:1.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap; }
+        .profile-avatar { width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--maroon),var(--terracotta-dark));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold);flex-shrink:0; }
+        .profile-info { flex:1; }
+        .profile-name { font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:0.2rem; }
+        .profile-email { font-size:0.8rem;color:var(--text-muted); }
+        .profile-joined { font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-top:0.3rem; }
+
+        /* Schema download box */
+        .schema-box { background:#0a0704;border:1px solid rgba(212,175,55,0.15);border-radius:6px;padding:1.5rem;margin-top:1rem; }
+        .schema-box pre { font-size:0.78rem;color:#A08060;line-height:1.8;overflow-x:auto;white-space:pre-wrap; }
+        .schema-box code { color:#D4AF37; }
+
+        .btn { display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.8rem;font-family:'Outfit',sans-serif;font-size:0.8rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;text-decoration:none;cursor:pointer;border:none;border-radius:2px;position:relative;overflow:hidden;transition:transform 0.25s,box-shadow 0.25s; }
+        .btn::before { content:'';position:absolute;inset:0;background:rgba(255,255,255,0.12);transform:translateX(-110%) skewX(-15deg);transition:transform 0.4s; }
+        .btn:hover::before { transform:translateX(110%) skewX(-15deg); }
+        .btn:hover { transform:translateY(-2px); }
+        .btn-gold { background:linear-gradient(135deg,#FFD700,#D4AF37);color:#1a0f00;box-shadow:0 4px 20px rgba(212,175,55,0.4); }
+        .btn-ghost { background:transparent;border:1.5px solid var(--gold);color:var(--gold); }
+        .btn-danger { background:linear-gradient(135deg,#5a0000,#800000);color:#E5D3B3;box-shadow:0 4px 15px rgba(128,0,0,0.4); }
+
+        @media(max-width:900px){ .dash-stats{grid-template-columns:1fr 1fr} .quick-grid{grid-template-columns:1fr 1fr} }
+        @media(max-width:600px){ .dash-stats{grid-template-columns:1fr} .quick-grid{grid-template-columns:1fr} }
+      `}</style>
+
+      <Navbar />
+
+      <div className="dash-wrap">
+
+        {/* BANNER */}
+        <div className="dash-banner">
+          <div className="dash-banner-inner">
+            <div className="dash-greeting">{greeting}, Explorer</div>
+            <div className="dash-name">{displayName}</div>
+            <div className="dash-sub">Welcome back to your Jaipur travel dashboard</div>
+            <div className="dash-meta">
+              <div className="dash-meta-item">
+                <div className="dash-meta-dot" />
+                <span>{user?.email}</span>
+              </div>
+              <div className="dash-meta-item">
+                <div className="dash-meta-dot" />
+                <span>Member since {new Date(user?.created_at).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* STATS */}
+        <div className="dash-stats">
+          {[
+            { icon: '🗺️', label: 'Tourist Spots', value: '50+', sub: 'Curated by VibeGuide' },
+            { icon: '🏛️', label: 'Heritage Sites', value: '6', sub: 'UNESCO + Royal' },
+            { icon: '🔥', label: 'Live Crowd Data', value: 'Real-time', sub: 'Heatmap active' },
+            { icon: '🌐', label: 'Languages', value: '12', sub: 'Supported via Translate' },
+          ].map(({ icon, label, value, sub }) => (
+            <div className="stat-card" key={label}>
+              <div className="stat-icon">{icon}</div>
+              <div className="stat-label">{label}</div>
+              <div className="stat-value">{value}</div>
+              <div className="stat-sub">{sub}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* QUICK ACCESS */}
+        <div className="dash-section">
+          <div className="dash-section-title">
+            Quick Access <span>Your Guide</span>
+          </div>
+          <div className="quick-grid">
+            {[
+              { icon: '🗺️', title: 'Route Planner', desc: 'Follow your 3-day curated Jaipur itinerary with stops, tips, and map links.', href: '/route', arrow: 'View Route →' },
+              { icon: '🏛️', title: 'Monuments', desc: 'Explore Jaipur\'s 6 most iconic landmarks with history and navigation.', href: '/#monuments', arrow: 'Explore →' },
+              { icon: '☕', title: 'Cafés & Bazaars', desc: 'Discover the best cafés, restaurants, and famous markets of Jaipur.', href: '/#explore', arrow: 'Discover →' },
+              { icon: '🚖', title: 'Book a Ride', desc: 'Rapido, OLA, Uber — find the fastest way to your next destination.', href: '/#ride', arrow: 'Book Now →' },
+              { icon: '📍', title: 'Full Map', desc: 'Open Google Maps centred on Jaipur with all key tourist spots.', href: 'https://maps.google.com/?q=Jaipur', arrow: 'Open Maps →' },
+              { icon: '🌐', title: 'Language Guide', desc: 'Common Hindi phrases for tourists — greetings, numbers, and shopping.', href: '/route', arrow: 'View Tips →' },
+            ].map(({ icon, title, desc, href, arrow }) => (
+              <Link href={href} className="quick-card" key={title}>
+                <div className="quick-card-icon">{icon}</div>
+                <div className="quick-card-title">{title}</div>
+                <div className="quick-card-desc">{desc}</div>
+                <div className="quick-card-arrow">{arrow}</div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* NEARBY MONUMENTS */}
+        <div className="dash-section">
+          <NearbyMonuments />
+        </div>
+
+        {/* LIVE HEATMAP */}
+        <div className="dash-section">
+          <div className="dash-section-title">
+            Live Crowd Map <span className="live-badge"><span className="live-dot" />Live</span>
+          </div>
+          <div className="dash-map">
+            <div className="dash-map-header">
+              <div>
+                <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '1rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                  Toggle &quot;Show Live Crowd Trails&quot; to see real-time foot-traffic heatmap. Enable &quot;Track My Path&quot; to contribute your location.
+                </p>
+              </div>
+            </div>
+            <HeatMap user={user} />
+          </div>
+        </div>
+
+        {/* PROFILE */}
+        <div className="dash-section">
+          <div className="dash-section-title">Your Profile</div>
+          <div className="profile-card">
+            <div className="profile-avatar">
+              {displayName.charAt(0).toUpperCase()}
+            </div>
+            <div className="profile-info">
+              <div className="profile-name">{displayName}</div>
+              <div className="profile-email">{user?.email}</div>
+              <div className="profile-joined">✦ VibeGuide Member</div>
+            </div>
+            <button onClick={handleLogout} className="btn btn-danger">Sign Out</button>
+          </div>
+        </div>
+
+        {/* DATABASE SCHEMA INFO */}
+        <div className="dash-section">
+          <div className="dash-section-title">
+            Setup: SQL Schema <span>Supabase</span>
+          </div>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem', lineHeight: 1.7 }}>
+            Paste this into your <strong style={{ color: 'var(--gold)' }}>Supabase SQL Editor</strong> (supabase.com → your project → SQL Editor → New Query) to create the required tables:
+          </p>
+          <div className="schema-box">
+            <pre><code>{`-- Profiles table (auto-created on signup)
+CREATE TABLE public.profiles (
+  id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+  full_name TEXT,
+  avatar_url TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Auto-create profile trigger
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.profiles (id, full_name)
+  VALUES (NEW.id, NEW.raw_user_meta_data->>'full_name');
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+-- Crowd trails for heatmap
+CREATE TABLE public.crowd_trails (
+  id BIGSERIAL PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  lat DOUBLE PRECISION NOT NULL,
+  lng DOUBLE PRECISION NOT NULL,
+  recorded_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_trails_bbox ON public.crowd_trails(lat, lng);
+CREATE INDEX idx_trails_time ON public.crowd_trails(recorded_at DESC);
+
+ALTER TABLE public.crowd_trails ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users insert own trails"
+  ON public.crowd_trails FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Public can read trails"
+  ON public.crowd_trails FOR SELECT USING (true);`}</code></pre>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <footer style={{ background: '#080603', borderTop: '1px solid rgba(212,175,55,0.1)', padding: '2rem', textAlign: 'center', marginTop: '2rem' }}>
+          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.5rem', fontWeight: 900, background: 'linear-gradient(135deg,#D4AF37,#D98E7E)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '0.4rem' }}>VibeGuide</div>
+          <div style={{ fontSize: '0.75rem', color: 'rgba(160,128,96,0.4)' }}>© 2025 VibeGuide · Your Jaipur Travel Companion</div>
+        </footer>
+
+      </div>
+    </>
+  );
+}
