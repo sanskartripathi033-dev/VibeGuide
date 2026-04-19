@@ -120,7 +120,7 @@ function ChatPanel({ onClose }) {
             onChange={e => setInput(e.target.value)}
             onKeyPress={e => e.key === 'Enter' && handleSend()}
             placeholder="Ask ATLAS anything..."
-            style={{ width: '100%', padding: '0.85rem 1.1rem', borderRadius: '14px', border: '1.5px solid rgba(21,58,48,0.1)', outline: 'none', background: '#F9FBFA', fontSize: '0.9rem', boxSizing: 'border-box', transition: 'all 0.3s' }}
+            style={{ width: '100%', padding: '0.85rem 1.1rem', borderRadius: '14px', border: '1.5px solid rgba(21,58,48,0.1)', outline: 'none', background: '#F9FBFA', fontSize: '0.9rem', color: '#153A30', boxSizing: 'border-box', transition: 'all 0.3s' }}
             onFocus={e => { e.target.style.borderColor = '#153A30'; e.target.style.boxShadow = '0 0 0 4px rgba(21,58,48,0.05)'; }}
             onBlur={e => { e.target.style.borderColor = 'rgba(21,58,48,0.1)'; e.target.style.boxShadow = 'none'; }}
           />

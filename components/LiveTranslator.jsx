@@ -25,6 +25,10 @@ export function LiveTranslatorPanel({ onClose }) {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const recognitionRef = useRef(null);
+  const targetLangRef = useRef(targetLang); // always holds latest lang for the closure
+
+  // Keep ref in sync whenever user changes language
+  useEffect(() => { targetLangRef.current = targetLang; }, [targetLang]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -43,7 +47,8 @@ export function LiveTranslatorPanel({ onClose }) {
         recognitionRef.current.onresult = (event) => {
           const transcript = event.results[0][0].transcript;
           setText(transcript);
-          handleTranslate(transcript);
+          // Use ref so we always get the currently selected language, not the stale mount-time value
+          handleTranslateWithLang(transcript, targetLangRef.current);
         };
 
         recognitionRef.current.onerror = (event) => {
@@ -78,20 +83,21 @@ export function LiveTranslatorPanel({ onClose }) {
     }
   };
 
-  const handleTranslate = async (textToTranslate = text) => {
-    if (!textToTranslate.trim()) return;
+  // Core translate function — accepts explicit lang so it works from closures too
+  const handleTranslateWithLang = async (textToTranslate, lang) => {
+    if (!textToTranslate?.trim()) return;
     setIsLoading(true);
     setErrorMsg('');
     try {
       const res = await fetch('/api/translate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: textToTranslate, targetLanguage: targetLang })
+        body: JSON.stringify({ text: textToTranslate, targetLanguage: lang })
       });
       const data = await res.json();
       if (res.ok) {
         setTranslatedText(data.translatedText);
-        speakText(data.translatedText, targetLang);
+        speakText(data.translatedText, lang);
       } else {
         setErrorMsg(data.error || 'Translation failed');
       }
@@ -212,7 +218,7 @@ export function LiveTranslatorPanel({ onClose }) {
             }}
           />
           <button
-            onClick={() => handleTranslate(text)}
+            onClick={() => handleTranslateWithLang(text, targetLangRef.current)}
             style={{
               position: 'absolute',
               bottom: '12px',
