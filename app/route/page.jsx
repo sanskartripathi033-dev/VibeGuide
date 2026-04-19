@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import LanguageTranslator from '@/components/LanguageTranslator';
 import Link from 'next/link';
+import { Globe, Plane, Thermometer, CreditCard, Clock, MapPin, Lightbulb, Sparkles, Bookmark, Check } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 const defaultItinerary = [
   {
@@ -10,18 +12,18 @@ const defaultItinerary = [
     theme: 'Iconic Global Arrival',
     color: '#3BA78F',
     stops: [
-      { time: '9:00 AM', icon: '🌍', name: 'Enter Your Destination', tip: 'Use the AI form above to generate a bespoke hour-by-hour itinerary for any city instantly.', duration: '1 hr', maps: 'World+Map' },
-      { time: '11:00 AM', icon: '🧠', name: 'AI Generation', tip: 'Our engine parses millions of geo-spatial points and structural reviews to curate a master route.', duration: '1.5 hrs', maps: 'AI+Engine' },
-      { time: '1:00 PM', icon: '💸', name: 'Real-time Budgeting', tip: 'Watch transit and daily estimates dynamically adapt to your generated plan.', duration: '1 hr', maps: 'Budget' },
+      { time: '9:00 AM', name: 'Enter Your Destination', tip: 'Use the AI form above to generate a bespoke hour-by-hour itinerary for any city instantly.', duration: '1 hr', maps: 'World+Map' },
+      { time: '11:00 AM', name: 'AI Generation', tip: 'Our engine parses millions of geo-spatial points and structural reviews to curate a master route.', duration: '1.5 hrs', maps: 'AI+Engine' },
+      { time: '1:00 PM', name: 'Real-time Budgeting', tip: 'Watch transit and daily estimates dynamically adapt to your generated plan.', duration: '1 hr', maps: 'Budget' },
     ],
   }
 ];
 
 const travelTips = [
-  { icon: '✈️', title: 'Global Flight Checks', tip: 'Always cross-reference flight prices using incognito mode on your browser to avoid markup.' },
-  { icon: '🌡️', title: 'Climate Check', tip: 'Before booking, investigate the shoulder seasons of your destination for optimal pricing and weather.' },
-  { icon: '💰', title: 'Currency Conversion', tip: 'Use cards without foreign transaction fees to save substantially on overseas swipe rates.' },
-  { icon: '🌐', title: 'Language', tip: 'Download local language packs offline in Google Translate before checking out of your hotel.' },
+  { title: 'Global Flights', tip: 'Always cross-reference flight prices using incognito mode on your browser to avoid markup.' },
+  { title: 'Climate Check', tip: 'Before booking, investigate the shoulder seasons of your destination for optimal pricing and weather.' },
+  { title: 'Currency', tip: 'Use cards without foreign transaction fees to save substantially on overseas swipe rates.' },
+  { title: 'Language', tip: 'Download local language packs offline in Google Translate before checking out of your hotel.' },
 ];
 
 export default function RoutePage() {
@@ -29,6 +31,17 @@ export default function RoutePage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [plan, setPlan] = useState(null);
   const [currentQuote, setCurrentQuote] = useState(0);
+  const [user, setUser] = useState(null);
+  const [tripSaved, setTripSaved] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data?.user ?? null));
+    const { data: listener } = supabase.auth.onAuthStateChange((_e, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => listener.subscription.unsubscribe();
+  }, []);
 
   const fallbackQuotes = [
     "To travel is to discover that everyone is wrong about other countries. – Aldous Huxley",
@@ -71,6 +84,53 @@ export default function RoutePage() {
 
   const itineraryToUse = plan ? plan.itinerary : defaultItinerary;
   const quotesToUse = plan?.quotes || fallbackQuotes;
+
+  const handleSaveTrip = async () => {
+    if (!plan) return;
+    setIsSaving(true);
+    
+    // Setup trip data payload
+    const tripData = {
+      destination: formData.origin,
+      days: formData.days,
+      budget: formData.budget,
+      preferences: formData.preferences,
+      itinerary: plan.itinerary,
+      title: `${formData.days}-Day ${formData.preferences} Trip to ${formData.origin}`
+    };
+
+    try {
+      if (user) {
+        // Try saving to DB if signed in
+        const res = await fetch('/api/trips', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: user.id, ...tripData })
+        });
+        
+        if (res.ok) {
+          setTripSaved(true);
+          window.dispatchEvent(new Event('tripsUpdated'));
+          return;
+        }
+      }
+      
+      // Fallback: Save to LocalStorage if API fails or user is guests
+      const localTrips = JSON.parse(localStorage.getItem('localTrips') || '[]');
+      tripData.id = 'local_' + Date.now();
+      tripData.created_at = new Date().toISOString();
+      localTrips.push(tripData);
+      localStorage.setItem('localTrips', JSON.stringify(localTrips));
+      
+      setTripSaved(true);
+      window.dispatchEvent(new Event('tripsUpdated'));
+      
+    } catch (e) {
+      alert('Network error while saving trip. Please check your connection.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <>
@@ -144,7 +204,7 @@ export default function RoutePage() {
         /* Stop/Timeline */
         .tips-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-top:2rem;margin-bottom:4rem; }
         .tip-card { background:var(--bg-card2); border:1px solid rgba(59,167,143,0.1); border-radius:6px; padding:1.5rem; }
-        .tip-icon { font-size:1.8rem;margin-bottom:0.8rem; }
+        .tip-icon { font-size:1.8rem;margin-bottom:0.8rem; display:flex; align-items:center; color: var(--gold); }
         .tip-title { font-family:'Playfair Display',serif;font-size:1rem;color:var(--gold);margin-bottom:0.4rem; }
         .tip-text { font-size:0.85rem;color:var(--text-muted);line-height:1.6; }
         .day-section { margin-bottom:4rem; }
@@ -158,9 +218,8 @@ export default function RoutePage() {
         .stop::before { content:''; position:absolute; left:-2.1rem; top:1.5rem; width:12px; height:12px; border-radius:50%; background:var(--gold); border:2px solid var(--bg-deep); }
         .stop-top { display:flex;align-items:flex-start;gap:1rem;margin-bottom:0.6rem; }
         .stop-time { font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold); }
-        .stop-icon { font-size:1.5rem; }
         .stop-name { font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:0.3rem; }
-        .stop-tip { font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--text-muted);line-height:1.6;font-style:italic; }
+        .stop-tip { font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--text-muted);line-height:1.6;font-style:italic;display:flex;align-items:flex-start;gap:6px; }
         
         @media(max-width:900px){ .ai-form { grid-template-columns:1fr; } .tips-grid {grid-template-columns:1fr 1fr;} }
         @media(max-width:600px){ .tips-grid {grid-template-columns:1fr;} }
@@ -177,7 +236,7 @@ export default function RoutePage() {
       <Navbar />
       
       <div className="translator-bar">
-        <span>🌐 Translate this page:</span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Globe size={14} /> Translate:</span>
         <LanguageTranslator />
       </div>
 
@@ -215,7 +274,7 @@ export default function RoutePage() {
               </select>
             </div>
             <div className="full-col" style={{ textAlign: 'center', marginTop: '1rem' }}>
-              <button type="submit" className="btn btn-gold" style={{ border: 'none', width: '100%', justifyContent: 'center' }}>✦ Generate Itinerary</button>
+              <button type="submit" className="btn btn-gold" style={{ border: 'none', width: '100%', justifyContent: 'center', display: 'inline-flex', alignItems: 'center', gap: '8px' }}><Sparkles size={16} /> Generate Itinerary</button>
             </div>
           </form>
         </div>
@@ -237,17 +296,26 @@ export default function RoutePage() {
         )}
 
         <div className="tips-grid">
-          {travelTips.map(({ icon, title, tip }) => (
+          {travelTips.map(({ title, tip }, i) => (
             <div className="tip-card" key={title}>
-              <div className="tip-icon">{icon}</div>
+              <div className="tip-icon">{[<Plane size={24} />, <Thermometer size={24} />, <CreditCard size={24} />, <Globe size={24} />][i]}</div>
               <div className="tip-title">{title}</div>
               <div className="tip-text">{tip}</div>
             </div>
           ))}
         </div>
 
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: 'clamp(1.8rem,4vw,2.8rem)', margin: '4rem 0 2rem' }}>
-          {plan ? "Your AI-Generated" : "Sample Curated"} <em style={{ fontStyle: 'italic', color: 'var(--terracotta-light)' }}>Journey</em>
+        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: 'clamp(1.8rem,4vw,2.8rem)', margin: '4rem 0 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+          <span>{plan ? "Your AI-Generated" : "Sample Curated"} <em style={{ fontStyle: 'italic', color: 'var(--terracotta-light)' }}>Journey</em></span>
+          {plan && (
+            <button
+              onClick={handleSaveTrip}
+              disabled={isSaving || tripSaved}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '0.65rem 1.5rem', background: tripSaved ? 'rgba(59,167,143,0.12)' : 'linear-gradient(135deg,var(--gold),var(--atlas-sage))', color: tripSaved ? 'var(--gold)' : 'white', border: tripSaved ? '1.5px solid var(--gold)' : 'none', borderRadius: '999px', cursor: isSaving || tripSaved ? 'default' : 'pointer', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '1px', fontFamily: 'Outfit, sans-serif', transition: 'all 0.3s' }}
+            >
+              {tripSaved ? <><Check size={15} /> Saved to Wishlist</> : isSaving ? 'Saving...' : <><Bookmark size={15} /> Save This Trip</>}
+            </button>
+          )}
         </h2>
 
         {itineraryToUse.map(({ day, theme, color, stops }) => (
@@ -261,19 +329,18 @@ export default function RoutePage() {
             </div>
 
             <div className="timeline">
-              {stops.map(({ time, icon, name, tip, duration, maps }) => (
+              {stops.map(({ time, name, tip, duration, maps }) => (
                 <div className="stop" key={name}>
                   <div className="stop-top">
                     <span className="stop-time">{time}</span>
-                    <span className="stop-icon">{icon}</span>
                     <div style={{ flex: 1 }}>
                       <div className="stop-name">{name}</div>
-                      <div className="stop-tip">💡 {tip}</div>
+                      <div className="stop-tip"><Lightbulb size={14} style={{ flexShrink: 0, marginTop: '2px', color: 'var(--gold)' }} />{tip}</div>
                     </div>
                   </div>
                   <div style={{ display: 'flex', gap: '1rem', marginTop: '0.8rem', alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>⏱ {duration}</span>
-                    <a href={`https://maps.google.com/?q=${maps}`} target="_blank" rel="noreferrer" style={{ fontSize: '0.7rem', background: 'rgba(59,167,143,0.1)', color: 'var(--gold)', textDecoration: 'none', padding: '0.3rem 0.8rem', borderRadius: '4px' }}>📍 Map</a>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}><Clock size={12} /> {duration}</span>
+                    <a href={`https://maps.google.com/?q=${maps}`} target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.7rem', background: 'rgba(59,167,143,0.1)', color: 'var(--gold)', textDecoration: 'none', padding: '0.3rem 0.8rem', borderRadius: '4px' }}><MapPin size={12} /> Map</a>
                   </div>
                 </div>
               ))}
@@ -284,18 +351,31 @@ export default function RoutePage() {
 
       {/* CTA */}
       <div className="route-cta">
-        <h2 className="cta-title">Ready to <em style={{ fontStyle: 'italic', color: 'var(--terracotta-light)' }}>Explore?</em></h2>
-        <p className="cta-sub">Sign in to track your path and see live crowd heatmaps of Jaipur's busiest spots.</p>
-        <div className="cta-buttons">
-          <Link href="/login" className="btn btn-gold">✦ Sign In / Sign Up</Link>
-          <Link href="/" className="btn btn-ghost">← Back to Home</Link>
-        </div>
+        {user ? (
+          <>
+            <h2 className="cta-title">Your journey <em style={{ fontStyle: 'italic', color: 'var(--terracotta-light)' }}>awaits.</em></h2>
+            <p className="cta-sub">View your saved trips, live crowd heatmaps, and nearby monuments on your dashboard.</p>
+            <div className="cta-buttons">
+              <Link href="/dashboard" className="btn btn-gold">Go to Dashboard</Link>
+              <Link href="/wishlist" className="btn btn-ghost">View Saved Trips</Link>
+            </div>
+          </>
+        ) : (
+          <>
+            <h2 className="cta-title">Ready to <em style={{ fontStyle: 'italic', color: 'var(--terracotta-light)' }}>Explore?</em></h2>
+            <p className="cta-sub">Sign in to save your itinerary, track your path and see live crowd heatmaps of Jaipur.</p>
+            <div className="cta-buttons">
+              <Link href="/login" className="btn btn-gold">Sign In / Sign Up</Link>
+              <Link href="/" className="btn btn-ghost">Back to Home</Link>
+            </div>
+          </>
+        )}
       </div>
 
       {/* FOOTER mini */}
       <footer style={{ background: 'var(--bg-card)', borderTop: '1px solid rgba(59,167,143,0.1)', padding: '2rem', textAlign: 'center' }}>
-        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.5rem', fontWeight: 900, background: 'linear-gradient(135deg,var(--gold),var(--terracotta-light))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '0.5rem' }}>VibeGuide</div>
-        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>© 2025 VibeGuide · Made with ♥ for travellers of Jaipur</div>
+        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.5rem', fontWeight: 900, background: 'linear-gradient(135deg,var(--atlas-sage),var(--atlas-green))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '0.5rem' }}>ATLAS</div>
+        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>© 2025 ATLAS · Made with care for travellers of Jaipur</div>
       </footer>
     </>
   );

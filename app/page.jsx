@@ -4,13 +4,14 @@ import HeroCanvas from '@/components/HeroCanvas';
 import HeatMap from '@/components/HeatMap';
 import LiveTranslator from '@/components/LiveTranslator';
 import ChatBot from '@/components/ChatBot';
+import WishlistFAB from '@/components/WishlistFAB';
 import NearbyMonuments from '@/components/NearbyMonuments';
 import WeatherWidget from '@/components/WeatherWidget';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import ImageWithLightbox from '@/components/ImageWithLightbox';
-import { MapPin, Coffee, Utensils, ShoppingBag, Bike, CarTaxiFront, Car, Navigation } from 'lucide-react';
+import { MapPin, Coffee, Utensils, ShoppingBag, Bike, CarTaxiFront, Car, Navigation, Star, MessageSquare, X, Send, Thermometer, Languages, UtensilsCrossed, Award } from 'lucide-react';
 
 
 /* ── helpers ── */
@@ -41,14 +42,102 @@ function switchTab(name) {
 
 export default function HomePage() {
   const [user, setUser] = useState(null);
+  const [reviewModal, setReviewModal] = useState(null); // { place, category }
+  const [reviewForm, setReviewForm] = useState({ rating: 0, body: '' });
+  const [reviewHover, setReviewHover] = useState(0);
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [reviewDone, setReviewDone] = useState(false);
   useReveal();
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data?.user ?? null));
   }, []);
 
+  const openReview = (place, category) => {
+    setReviewModal({ place, category });
+    setReviewForm({ rating: 0, body: '' });
+    setReviewHover(0);
+    setReviewDone(false);
+  };
+
+  const submitReview = async (e) => {
+    e.preventDefault();
+    if (!user) { window.location.href = '/login'; return; }
+    if (reviewForm.rating === 0) { alert('Please select a star rating.'); return; }
+    setReviewSubmitting(true);
+    try {
+      await fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: user.id,
+          author_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Anonymous',
+          place: reviewModal.place,
+          category: reviewModal.category,
+          rating: reviewForm.rating,
+          body: reviewForm.body
+        })
+      });
+      setReviewDone(true);
+    } catch (err) { alert('Failed to post review.'); }
+    finally { setReviewSubmitting(false); }
+  };
+
   return (
     <>
+      {/* ── REVIEW MODAL ── */}
+      {reviewModal && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 500, background: 'rgba(11,26,21,0.72)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem' }}
+          onClick={e => e.target === e.currentTarget && setReviewModal(null)}>
+          <div style={{ background: 'white', borderRadius: '24px', padding: '2rem', maxWidth: '460px', width: '100%', boxShadow: '0 30px 80px rgba(0,0,0,0.2)', animation: 'slideUp 0.3s ease' }}>
+            <style>{`@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}`}</style>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.4rem' }}>
+              <div>
+                <div style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--atlas-sage)', marginBottom: '0.2rem' }}>{reviewModal.category}</div>
+                <div style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.4rem', color: 'var(--atlas-green)', fontWeight: 700 }}>{reviewModal.place}</div>
+              </div>
+              <button onClick={() => setReviewModal(null)} style={{ width: '34px', height: '34px', borderRadius: '50%', background: 'rgba(21,58,48,0.06)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--atlas-green)' }}><X size={16} /></button>
+            </div>
+
+            {reviewDone ? (
+              <div style={{ textAlign: 'center', padding: '2rem 0' }}>
+                <div style={{ fontSize: '2.5rem', marginBottom: '0.8rem' }}>✓</div>
+                <div style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.2rem', color: 'var(--atlas-green)', marginBottom: '0.5rem' }}>Review Posted</div>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '1.2rem' }}>Thank you for sharing your experience.</p>
+                <Link href="/reviews" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '0.6rem 1.4rem', background: 'var(--atlas-green)', color: 'white', borderRadius: '10px', textDecoration: 'none', fontSize: '0.82rem', fontWeight: 600 }}>View All Reviews</Link>
+              </div>
+            ) : (
+              <form onSubmit={submitReview}>
+                <div style={{ marginBottom: '1.2rem' }}>
+                  <div style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--atlas-sage)', marginBottom: '0.5rem' }}>Your Rating</div>
+                  <div style={{ display: 'flex', gap: '6px' }}>
+                    {[1,2,3,4,5].map(s => (
+                      <button key={s} type="button"
+                        onMouseEnter={() => setReviewHover(s)}
+                        onMouseLeave={() => setReviewHover(0)}
+                        onClick={() => setReviewForm(f => ({ ...f, rating: s }))}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                        <Star size={28} fill={(reviewHover || reviewForm.rating) >= s ? '#D4AF37' : 'none'} color={(reviewHover || reviewForm.rating) >= s ? '#D4AF37' : '#a0b4af'} />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div style={{ marginBottom: '1.2rem' }}>
+                  <div style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--atlas-sage)', marginBottom: '0.5rem' }}>Your Experience</div>
+                  <textarea required minLength={20} value={reviewForm.body} onChange={e => setReviewForm(f => ({ ...f, body: e.target.value }))}
+                    placeholder="What made this place special? Tips for other travellers..."
+                    style={{ width: '100%', padding: '0.85rem', border: '1.5px solid rgba(21,58,48,0.12)', borderRadius: '12px', fontFamily: "'Cormorant Garamond',serif", fontSize: '1rem', color: 'var(--atlas-green)', resize: 'vertical', minHeight: '100px', outline: 'none', background: '#F9FBFA' }} />
+                </div>
+                {!user && <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>You need to <Link href="/login" style={{ color: 'var(--atlas-sage)' }}>sign in</Link> to post a review.</p>}
+                <button type="submit" disabled={reviewSubmitting}
+                  style={{ width: '100%', padding: '0.9rem', background: 'linear-gradient(135deg, var(--atlas-green), var(--atlas-sage))', color: 'white', border: 'none', borderRadius: '12px', fontFamily: 'Outfit, sans-serif', fontSize: '0.9rem', fontWeight: 700, letterSpacing: '1px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  <Send size={15} /> {reviewSubmitting ? 'Posting...' : 'Post Review'}
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
       <Navbar />
 
       {/* ── HERO ── */}
@@ -74,25 +163,98 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* ── ABOUT MINI ── */}
+      {/* ── ABOUT & FACTS ── */}
       <section id="about" className="section-bg">
         <div className="section-bg-gradient" style={{ background: 'linear-gradient(160deg,rgba(20,36,32,0.97)0%,rgba(13,22,20,0.93)100%)' }} />
         <div className="container">
           <div className="about-grid reveal">
-            <div className="about-text" style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
-              <div className="section-label">✦ The Pink City</div>
-              <h2 className="section-title">The Soul of <em>Rajput Royalty</em></h2>
-              <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '1.2rem', color: 'var(--text-muted)', lineHeight: 1.8 }}>
-                Founded in <strong>1727</strong>, Jaipur is India's first planned city — a masterpiece of Vedic architecture.
-                Its rose-red sandstone walls and opulent palaces tell tales of a thousand years of desert glory.
-              </p>
-              <div style={{ marginTop: '2rem' }}>
-                <Link href="/about" className="btn btn-ghost btn-sm">Read Our Story →</Link>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '4rem', alignItems: 'center' }}>
+              <div className="about-image-stack" style={{ position: 'relative', height: '400px' }}>
+                <div style={{
+                  position: 'absolute', width: '80%', height: '90%', top: 0, left: 0,
+                  borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)'
+                }}>
+                  <ImageWithLightbox src="/thumbnails/City Palace.png" alt="City Palace" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+                <div style={{
+                  position: 'absolute', width: '60%', height: '70%', bottom: 0, right: 0,
+                  borderRadius: '24px', overflow: 'hidden', boxShadow: '0 15px 40px rgba(0,0,0,0.25)', border: '1px solid rgba(255,255,255,0.1)'
+                }}>
+                  <ImageWithLightbox src="/thumbnails/Jal Mahal.png" alt="Jal Mahal" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+                <div style={{
+                  position: 'absolute', top: '50%', left: '60%', transform: 'translate(-50%, -50%)',
+                  background: 'linear-gradient(135deg, var(--maroon), var(--atlas-green))',
+                  borderRadius: '50%', width: '100px', height: '100px', display: 'flex', flexDirection: 'column',
+                  alignItems: 'center', justifyContent: 'center', boxShadow: '0 10px 30px rgba(0,0,0,0.4)', zIndex: 10, border: '2px solid var(--gold)'
+                }}>
+                  <strong style={{ fontSize: '1.8rem', color: 'var(--gold)', fontFamily: "'Playfair Display', serif" }}>1727</strong>
+                  <span style={{ fontSize: '0.6rem', color: '#fff', letterSpacing: '2px', textTransform: 'uppercase' }}>Founded</span>
+                </div>
+              </div>
+
+              <div className="about-text" style={{ textAlign: 'left' }}>
+                <div className="section-label">✦ The Pink City</div>
+                <h2 className="section-title">The Soul of <em>Rajput Royalty</em></h2>
+                <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '1.25rem', color: 'var(--text-muted)', lineHeight: 1.8, marginBottom: '2rem' }}>
+                  Founded in <strong>1727</strong> by Maharaja Sawai Jai Singh II, Jaipur is India's first planned city — a masterpiece of Vedic architecture.
+                  Its rose-red sandstone walls and opulent palaces tell tales of a thousand years of desert glory.
+                  A UNESCO World Heritage site, it remains a vibrant canvas of culture, gems, and history.
+                </p>
+                
+                <div className="about-facts" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+                  {[
+                    { icon: <Thermometer size={22} color="var(--atlas-sage)" />, label: 'Climate', val: 'Oct–Mar is ideal' },
+                    { icon: <Languages size={22} color="var(--atlas-sage)" />, label: 'Language', val: 'Hindi & English' },
+                    { icon: <UtensilsCrossed size={22} color="var(--atlas-sage)" />, label: 'Must Eat', val: 'Dal Baati Churma' },
+                    { icon: <Award size={22} color="var(--atlas-sage)" />, label: 'Status', val: 'UNESCO Heritage' }
+                  ].map(f => (
+                    <div key={f.label} className="fact-card">
+                      <div className="fact-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.5rem' }}>{f.icon}</div>
+                      <div className="fact-label">{f.label}</div>
+                      <div className="fact-value">{f.val}</div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ marginTop: '2.5rem' }}>
+                  <Link href="/about" className="btn btn-ghost">Discover Our Full History →</Link>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* ── LOCATION STRIP (INFINITE SCROLL) ── */}
+      <div className="location-strip">
+        <div className="location-strip-inner">
+          {[
+            { img: "thumbnails/Hawa Mahal.png", name: "Hawa Mahal", sub: "Palace of Winds" },
+            { img: "thumbnails/Amber Fort.png", name: "Amer Fort", sub: "Hilltop Citadel" },
+            { img: "thumbnails/City Palace.png", name: "City Palace", sub: "Royal Residence" },
+            { img: "thumbnails/Jal Mahal.png", name: "Jal Mahal", sub: "Water Palace" },
+            { img: "thumbnails/Jantar Mantar.png", name: "Jantar Mantar", sub: "Astronomy Marvel" },
+            { img: "thumbnails/Nahar Garh.png", name: "Nahargarh", sub: "Sunset Fortress" },
+            { img: "thumbnails/Ptrika Gate.png", name: "Patrika Gate", sub: "Rainbow Memorial" }
+          ].concat([
+            { img: "thumbnails/Hawa Mahal.png", name: "Hawa Mahal", sub: "Palace of Winds" },
+            { img: "thumbnails/Amber Fort.png", name: "Amer Fort", sub: "Hilltop Citadel" },
+            { img: "thumbnails/City Palace.png", name: "City Palace", sub: "Royal Residence" },
+            { img: "thumbnails/Jal Mahal.png", name: "Jal Mahal", sub: "Water Palace" },
+            { img: "thumbnails/Jantar Mantar.png", name: "Jantar Mantar", sub: "Astronomy Marvel" },
+            { img: "thumbnails/Nahar Garh.png", name: "Nahargarh", sub: "Sunset Fortress" },
+            { img: "thumbnails/Ptrika Gate.png", name: "Patrika Gate", sub: "Rainbow Memorial" }
+          ]).map((item, i) => (
+            <div key={i} className="strip-item">
+              <img src={item.img} alt={item.name} />
+              <div className="strip-item-label">
+                <div className="strip-item-name">{item.name}</div>
+                <div className="strip-item-sub">{item.sub}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* ── PROXIMITY DISCOVERY ── */}
       <section id="nearby" className="section-bg" style={{ padding: '4rem 2rem' }}>
@@ -112,11 +274,12 @@ export default function HomePage() {
           </div>
 
           {/* Bento Grid */}
-          <div className="reveal" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.8fr) minmax(0, 1fr)', gap: '1.5rem', height: '500px' }}>
+          <div className="reveal monument-bento">
             {/* Main Feature */}
             <div style={{
               position: 'relative',
               borderRadius: '16px',
+              minHeight: '450px',
               overflow: 'hidden',
               boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
               border: '1px solid rgba(255,255,255,0.6)',
@@ -127,10 +290,13 @@ export default function HomePage() {
             >
               <ImageWithLightbox src="https://res.cloudinary.com/dbizje0oq/image/upload/v1776553271/Hawa-Mahal-2_zkkaws.jpg" alt="Hawa Mahal" className="monument-img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(21,58,48,0.9) 0%, transparent 60%)' }} />
-              <div style={{ position: 'absolute', bottom: '2rem', left: '2rem', color: '#fff' }}>
+              <div style={{ position: 'absolute', bottom: '2rem', left: '2rem', right: '1rem', color: '#fff' }}>
                 <div style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: '#F6F8F7', opacity: 0.8, marginBottom: '0.2rem' }}>Iconic Landmark</div>
                 <div style={{ fontSize: '1.8rem', fontWeight: 700, fontFamily: "'Playfair Display', serif", marginBottom: '0.5rem' }}>Hawa Mahal</div>
-                <div style={{ fontSize: '0.9rem', color: '#c1dcd5', maxWidth: '400px' }}>The iconic Palace of Winds, featuring 953 intricate pink sandstone windows designed for royal ladies.</div>
+                <div style={{ fontSize: '0.9rem', color: '#c1dcd5', maxWidth: '400px', marginBottom: '0.8rem' }}>The iconic Palace of Winds, featuring 953 intricate pink sandstone windows designed for royal ladies.</div>
+                <button onClick={() => openReview('Hawa Mahal', 'Monument')} style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '0.4rem 0.9rem', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', borderRadius: '8px', color: 'white', fontSize: '0.72rem', fontWeight: 600, letterSpacing: '0.5px', cursor: 'pointer', backdropFilter: 'blur(8px)', transition: 'background 0.2s' }}>
+                  <MessageSquare size={13} /> Write a Review
+                </button>
               </div>
             </div>
 
@@ -150,9 +316,12 @@ export default function HomePage() {
               >
                 <ImageWithLightbox src="/thumbnails/Amber Fort.png" alt="Amer Fort" className="monument-img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(21,58,48,0.8) 0%, transparent 70%)' }} />
-                <div style={{ position: 'absolute', bottom: '1.5rem', left: '1.5rem', color: '#fff' }}>
+                <div style={{ position: 'absolute', bottom: '1.5rem', left: '1.5rem', right: '1rem', color: '#fff' }}>
                   <div style={{ fontSize: '1.4rem', fontWeight: 700, fontFamily: "'Playfair Display', serif" }}>Amer Fort</div>
-                  <div style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: '#c1dcd5' }}>Hilltop Citadel</div>
+                  <div style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: '#c1dcd5', marginBottom: '0.5rem' }}>Hilltop Citadel</div>
+                  <button onClick={() => openReview('Amer Fort', 'Monument')} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '0.3rem 0.7rem', background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: '6px', color: 'white', fontSize: '0.68rem', fontWeight: 600, cursor: 'pointer' }}>
+                    <MessageSquare size={11} /> Review
+                  </button>
                 </div>
               </div>
 
@@ -170,9 +339,12 @@ export default function HomePage() {
               >
                 <ImageWithLightbox src="/thumbnails/City Palace.png" alt="City Palace" className="monument-img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(21,58,48,0.8) 0%, transparent 70%)' }} />
-                <div style={{ position: 'absolute', bottom: '1.5rem', left: '1.5rem', color: '#fff' }}>
+                <div style={{ position: 'absolute', bottom: '1.5rem', left: '1.5rem', right: '1rem', color: '#fff' }}>
                   <div style={{ fontSize: '1.4rem', fontWeight: 700, fontFamily: "'Playfair Display', serif" }}>City Palace</div>
-                  <div style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: '#c1dcd5' }}>Royal Residence</div>
+                  <div style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: '#c1dcd5', marginBottom: '0.5rem' }}>Royal Residence</div>
+                  <button onClick={() => openReview('City Palace', 'Monument')} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '0.3rem 0.7rem', background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: '6px', color: 'white', fontSize: '0.68rem', fontWeight: 600, cursor: 'pointer' }}>
+                    <MessageSquare size={11} /> Review
+                  </button>
                 </div>
               </div>
 
@@ -190,9 +362,12 @@ export default function HomePage() {
               >
                 <ImageWithLightbox src="https://res.cloudinary.com/dbizje0oq/image/upload/v1776553171/Ptrika_Gate_fninvx.png" alt="Patrika Gate" className="monument-img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(21,58,48,0.8) 0%, transparent 70%)' }} />
-                <div style={{ position: 'absolute', bottom: '1.5rem', left: '1.5rem', color: '#fff' }}>
+                <div style={{ position: 'absolute', bottom: '1.5rem', left: '1.5rem', right: '1rem', color: '#fff' }}>
                   <div style={{ fontSize: '1.4rem', fontWeight: 700, fontFamily: "'Playfair Display', serif" }}>Patrika Gate</div>
-                  <div style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: '#c1dcd5' }}>Rainbow Memorial</div>
+                  <div style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: '#c1dcd5', marginBottom: '0.5rem' }}>Rainbow Memorial</div>
+                  <button onClick={() => openReview('Patrika Gate', 'Monument')} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '0.3rem 0.7rem', background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: '6px', color: 'white', fontSize: '0.68rem', fontWeight: 600, cursor: 'pointer' }}>
+                    <MessageSquare size={11} /> Review
+                  </button>
                 </div>
               </div>
             </div>
@@ -241,10 +416,10 @@ export default function HomePage() {
 
           <div className="tab-panel active" id="tab-cafes">
             {[
-              { img: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80', cat: <><Coffee size={12} /> Specialty Coffee</>, name: 'Anokhi Café', info: 'Breezy courtyard café with artisan coffee, fresh salads, and block-print interiors.', tags: ['Courtyard', 'Artisan'], q: 'Anokhi+Cafe+Jaipur' },
-              { img: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=80', cat: <><Coffee size={12} /> Rooftop Café</>, name: 'Tapri Central', info: "Jaipur's most beloved chai café with rooftop views of the old city and artisanal blends.", tags: ['Rooftop', 'Chai'], q: 'Tapri+Central+Jaipur' },
-              { img: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&q=80', cat: <><Coffee size={12} /> Heritage Café</>, name: 'Café Palladio', info: 'A jaw-dropping Indo-Italian space inside a 300-year-old haveli with hand-painted murals.', tags: ['Heritage', 'Design'], q: 'Cafe+Palladio+Jaipur' },
-            ].map(({ img, cat, name, info, tags, q }) => (
+              { img: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80', cat: <><Coffee size={12} /> Specialty Coffee</>, name: 'Anokhi Café', info: 'Breezy courtyard café with artisan coffee, fresh salads, and block-print interiors.', tags: ['Courtyard', 'Artisan'], q: 'Anokhi+Cafe+Jaipur', cat2: 'Cafe' },
+              { img: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=80', cat: <><Coffee size={12} /> Rooftop Café</>, name: 'Tapri Central', info: "Jaipur's most beloved chai café with rooftop views of the old city and artisanal blends.", tags: ['Rooftop', 'Chai'], q: 'Tapri+Central+Jaipur', cat2: 'Cafe' },
+              { img: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&q=80', cat: <><Coffee size={12} /> Heritage Café</>, name: 'Café Palladio', info: 'A jaw-dropping Indo-Italian space inside a 300-year-old haveli with hand-painted murals.', tags: ['Heritage', 'Design'], q: 'Cafe+Palladio+Jaipur', cat2: 'Cafe' },
+            ].map(({ img, cat, name, info, tags, q, cat2 }) => (
               <div className="place-card reveal" key={name}>
                 <div className="place-img-container">
                   <ImageWithLightbox src={img} alt={name} className="place-img" />
@@ -254,10 +429,13 @@ export default function HomePage() {
                   <div className="place-name">{name}</div>
                   <div className="place-info">{info}</div>
                   <div className="place-tags">{tags.map(t => <span className="place-tag" key={t}>{t}</span>)}</div>
-                  <div className="place-actions">
+                  <div className="place-actions" style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
                     <a href={`https://maps.google.com/?q=${q}`} target="_blank" rel="noreferrer" className="btn btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 800, color: 'var(--atlas-green)', border: '1.5px solid var(--atlas-green)', background: 'transparent' }}>
                       <Navigation size={14} /> Directions
                     </a>
+                    <button onClick={() => openReview(name, cat2)} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '0.4rem 0.9rem', background: 'rgba(21,58,48,0.06)', border: '1px solid rgba(21,58,48,0.1)', borderRadius: '8px', color: 'var(--atlas-green)', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', fontFamily: 'Outfit, sans-serif', transition: 'background 0.2s' }}>
+                      <MessageSquare size={13} /> Review
+                    </button>
                   </div>
                 </div>
               </div>
@@ -266,10 +444,10 @@ export default function HomePage() {
 
           <div className="tab-panel" id="tab-restaurants">
             {[
-              { img: 'https://images.unsplash.com/photo-1599458252573-56ae36120de1?w=600&q=80', cat: <><Utensils size={12} /> Royal Dining</>, name: 'Suvarna Mahal', info: 'Dine like royalty inside the Rambagh Palace. Gold leaf ceilings and traditional royal thali.', tags: ['Fine Dining', 'Royal'], q: 'Suvarna+Mahal+Jaipur' },
-              { img: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=600&q=80', cat: <><Utensils size={12} /> Street Food King</>, name: 'LMB Jaipur', info: 'Beloved sweets shop and restaurant since 1954. Pyaaz kachori and ghewar are mandatory.', tags: ['Legendary', 'Sweets'], q: 'LMB+Jaipur' },
-              { img: 'https://images.unsplash.com/photo-1567337710282-00832b415979?w=600&q=80', cat: <><Utensils size={12} /> Traditional</>, name: 'Handi Restaurant', info: 'Jaipur institution for authentic Rajasthani dal baati churma and clay oven specialties.', tags: ['Authentic', 'Folk music'], q: 'Handi+Restaurant+Jaipur' },
-            ].map(({ img, cat, name, info, tags, q }) => (
+              { img: 'https://images.unsplash.com/photo-1599458252573-56ae36120de1?w=600&q=80', cat: <><Utensils size={12} /> Royal Dining</>, name: 'Suvarna Mahal', info: 'Dine like royalty inside the Rambagh Palace. Gold leaf ceilings and traditional royal thali.', tags: ['Fine Dining', 'Royal'], q: 'Suvarna+Mahal+Jaipur', cat2: 'Restaurant' },
+              { img: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=600&q=80', cat: <><Utensils size={12} /> Street Food King</>, name: 'LMB Jaipur', info: 'Beloved sweets shop and restaurant since 1954. Pyaaz kachori and ghewar are mandatory.', tags: ['Legendary', 'Sweets'], q: 'LMB+Jaipur', cat2: 'Restaurant' },
+              { img: 'https://images.unsplash.com/photo-1567337710282-00832b415979?w=600&q=80', cat: <><Utensils size={12} /> Traditional</>, name: 'Handi Restaurant', info: 'Jaipur institution for authentic Rajasthani dal baati churma and clay oven specialties.', tags: ['Authentic', 'Folk music'], q: 'Handi+Restaurant+Jaipur', cat2: 'Restaurant' },
+            ].map(({ img, cat, name, info, tags, q, cat2 }) => (
               <div className="place-card reveal" key={name}>
                 <div className="place-img-container">
                   <ImageWithLightbox src={img} alt={name} className="place-img" />
@@ -279,10 +457,13 @@ export default function HomePage() {
                   <div className="place-name">{name}</div>
                   <div className="place-info">{info}</div>
                   <div className="place-tags">{tags.map(t => <span className="place-tag" key={t}>{t}</span>)}</div>
-                  <div className="place-actions">
+                  <div className="place-actions" style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
                     <a href={`https://maps.google.com/?q=${q}`} target="_blank" rel="noreferrer" className="btn btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 800, color: 'var(--atlas-green)', border: '1.5px solid var(--atlas-green)', background: 'transparent' }}>
                       <Navigation size={14} /> Directions
                     </a>
+                    <button onClick={() => openReview(name, cat2)} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '0.4rem 0.9rem', background: 'rgba(21,58,48,0.06)', border: '1px solid rgba(21,58,48,0.1)', borderRadius: '8px', color: 'var(--atlas-green)', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', fontFamily: 'Outfit, sans-serif' }}>
+                      <MessageSquare size={13} /> Review
+                    </button>
                   </div>
                 </div>
               </div>
@@ -291,10 +472,10 @@ export default function HomePage() {
 
           <div className="tab-panel" id="tab-shops">
             {[
-              { img: 'https://images.unsplash.com/photo-1609743522471-83c84ce23e32?w=600&q=80', cat: <><ShoppingBag size={12} /> Jewellery</>, name: 'Johari Bazaar', info: "The heartbeat of Jaipur's gem trade. Rubies, emeralds, and kundan jewellery since the 16th century.", tags: ['Gems', 'Jewellery'], q: 'Johari+Bazaar+Jaipur' },
-              { img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80', cat: <><ShoppingBag size={12} /> Textiles</>, name: 'Bapu Bazaar', info: "Go-to for block-print fabrics, mojari shoes, and Rajasthani lac bangles. Bargaining welcomed.", tags: ['Prints', 'Shoes'], q: 'Bapu+Bazaar+Jaipur' },
-              { img: 'https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?w=600&q=80', cat: <><ShoppingBag size={12} /> Curated</>, name: 'Anokhi Store', info: 'Iconic brand for hand block-printed garments. Every piece is ethically made by local artisans.', tags: ['Ethical', 'Modern'], q: 'Anokhi+Store+Jaipur' },
-            ].map(({ img, cat, name, info, tags, q }) => (
+              { img: 'https://images.unsplash.com/photo-1609743522471-83c84ce23e32?w=600&q=80', cat: <><ShoppingBag size={12} /> Jewellery</>, name: 'Johari Bazaar', info: "The heartbeat of Jaipur's gem trade. Rubies, emeralds, and kundan jewellery since the 16th century.", tags: ['Gems', 'Jewellery'], q: 'Johari+Bazaar+Jaipur', cat2: 'Bazaar' },
+              { img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80', cat: <><ShoppingBag size={12} /> Textiles</>, name: 'Bapu Bazaar', info: "Go-to for block-print fabrics, mojari shoes, and Rajasthani lac bangles. Bargaining welcomed.", tags: ['Prints', 'Shoes'], q: 'Bapu+Bazaar+Jaipur', cat2: 'Bazaar' },
+              { img: 'https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?w=600&q=80', cat: <><ShoppingBag size={12} /> Curated</>, name: 'Anokhi Store', info: 'Iconic brand for hand block-printed garments. Every piece is ethically made by local artisans.', tags: ['Ethical', 'Modern'], q: 'Anokhi+Store+Jaipur', cat2: 'Bazaar' },
+            ].map(({ img, cat, name, info, tags, q, cat2 }) => (
               <div className="place-card reveal" key={name}>
                 <div className="place-img-container">
                   <ImageWithLightbox src={img} alt={name} className="place-img" />
@@ -304,10 +485,13 @@ export default function HomePage() {
                   <div className="place-name">{name}</div>
                   <div className="place-info">{info}</div>
                   <div className="place-tags">{tags.map(t => <span className="place-tag" key={t}>{t}</span>)}</div>
-                  <div className="place-actions">
+                  <div className="place-actions" style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
                     <a href={`https://maps.google.com/?q=${q}`} target="_blank" rel="noreferrer" className="btn btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 800, color: 'var(--atlas-green)', border: '1.5px solid var(--atlas-green)', background: 'transparent' }}>
                       <Navigation size={14} /> Directions
                     </a>
+                    <button onClick={() => openReview(name, cat2)} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '0.4rem 0.9rem', background: 'rgba(21,58,48,0.06)', border: '1px solid rgba(21,58,48,0.1)', borderRadius: '8px', color: 'var(--atlas-green)', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', fontFamily: 'Outfit, sans-serif' }}>
+                      <MessageSquare size={13} /> Review
+                    </button>
                   </div>
                 </div>
               </div>
@@ -359,6 +543,7 @@ export default function HomePage() {
       </section>
       <LiveTranslator />
       <ChatBot />
+      <WishlistFAB />
 
       {/* ── FOOTER ── */}
       <footer>
@@ -443,6 +628,7 @@ export default function HomePage() {
 
         /* Monuments */
         #monuments { background:var(--bg-deep); }
+        .monument-bento { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr); gap: 1.5rem; min-height: 650px; }
         .monuments-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem; }
         .monument-card { position:relative;overflow:hidden;border-radius:12px;cursor:pointer;border:1px solid rgba(59,167,143,0.12);transition:border-color 0.4s,box-shadow 0.4s; }
         .monument-card:hover { border-color:rgba(59,167,143,0.5);box-shadow:0 12px 40px rgba(59,167,143,0.12); }
@@ -483,6 +669,7 @@ export default function HomePage() {
         .ride-card:hover { transform:translateY(-5px);box-shadow:0 10px 40px rgba(59,167,143,0.15),0 0 0 1px rgba(59,167,143,0.12);border-color:rgba(59,167,143,0.4); }
 
         @media(max-width:900px){
+          .monument-bento { grid-template-columns: 1fr; min-height: auto; }
           .monuments-grid{grid-template-columns:1fr 1fr}
           .monument-card:first-child{grid-column:span 2}
           .tab-panel.active{grid-template-columns:1fr 1fr}

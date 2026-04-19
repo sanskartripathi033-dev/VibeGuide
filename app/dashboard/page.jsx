@@ -6,6 +6,8 @@ import Navbar from '@/components/Navbar';
 import HeatMap from '@/components/HeatMap';
 import NearbyMonuments from '@/components/NearbyMonuments';
 import { supabase } from '@/lib/supabase';
+import { Map, Landmark, Flame, Globe, Coffee, CarTaxiFront, MapPin } from 'lucide-react';
+
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -189,13 +191,13 @@ export default function DashboardPage() {
         {/* STATS */}
         <div className="dash-stats">
           {[
-            { icon: '🗺️', label: 'Tourist Spots', value: '50+', sub: 'Curated by VibeGuide' },
-            { icon: '🏛️', label: 'Heritage Sites', value: '6', sub: 'UNESCO + Royal' },
-            { icon: '🔥', label: 'Live Crowd Data', value: 'Real-time', sub: 'Heatmap active' },
-            { icon: '🌐', label: 'Languages', value: '12', sub: 'Supported via Translate' },
-          ].map(({ icon, label, value, sub }) => (
-            <div className="stat-card" key={label}>
-              <div className="stat-icon">{icon}</div>
+            { icon: <Map size={28} color="var(--gold)" />, label: 'Tourist Spots', value: '50+', sub: 'Curated by ATLAS' },
+            { icon: <Landmark size={28} color="var(--gold)" />, label: 'Heritage Sites', value: '6', sub: 'UNESCO + Royal' },
+            { icon: <Flame size={28} color="var(--gold)" />, label: 'Live Crowd Data', value: 'Real-time', sub: 'Heatmap active' },
+            { icon: <Globe size={28} color="var(--gold)" />, label: 'Languages', value: '12', sub: 'Supported via Translate' },
+          ].map(({ icon, label, value, sub }, i) => (
+            <div className="stat-card" key={i}>
+              <div className="stat-icon" style={{ display: 'flex', alignItems: 'center', marginBottom: '0.8rem' }}>{icon}</div>
               <div className="stat-label">{label}</div>
               <div className="stat-value">{value}</div>
               <div className="stat-sub">{sub}</div>
@@ -210,15 +212,15 @@ export default function DashboardPage() {
           </div>
           <div className="quick-grid">
             {[
-              { icon: '🗺️', title: 'Route Planner', desc: 'Follow your 3-day curated Jaipur itinerary with stops, tips, and map links.', href: '/route', arrow: 'View Route →' },
-              { icon: '🏛️', title: 'Monuments', desc: 'Explore Jaipur\'s 6 most iconic landmarks with history and navigation.', href: '/#monuments', arrow: 'Explore →' },
-              { icon: '☕', title: 'Cafés & Bazaars', desc: 'Discover the best cafés, restaurants, and famous markets of Jaipur.', href: '/#explore', arrow: 'Discover →' },
-              { icon: '🚖', title: 'Book a Ride', desc: 'Rapido, OLA, Uber — find the fastest way to your next destination.', href: '/#ride', arrow: 'Book Now →' },
-              { icon: '📍', title: 'Full Map', desc: 'Open Google Maps centred on Jaipur with all key tourist spots.', href: 'https://maps.google.com/?q=Jaipur', arrow: 'Open Maps →' },
-              { icon: '🌐', title: 'Language Guide', desc: 'Common Hindi phrases for tourists — greetings, numbers, and shopping.', href: '/route', arrow: 'View Tips →' },
-            ].map(({ icon, title, desc, href, arrow }) => (
-              <Link href={href} className="quick-card" key={title}>
-                <div className="quick-card-icon">{icon}</div>
+              { icon: <Map size={28} color="var(--gold)" />, title: 'Route Planner', desc: 'Follow your 3-day curated Jaipur itinerary with stops, tips, and map links.', href: '/route', arrow: 'View Route →' },
+              { icon: <Landmark size={28} color="var(--gold)" />, title: 'Monuments', desc: 'Explore Jaipur\'s 6 most iconic landmarks with history and navigation.', href: '/#monuments', arrow: 'Explore →' },
+              { icon: <Coffee size={28} color="var(--gold)" />, title: 'Cafés & Bazaars', desc: 'Discover the best cafés, restaurants, and famous markets of Jaipur.', href: '/#explore', arrow: 'Discover →' },
+              { icon: <CarTaxiFront size={28} color="var(--gold)" />, title: 'Book a Ride', desc: 'Rapido, OLA, Uber — find the fastest way to your next destination.', href: '/#ride', arrow: 'Book Now →' },
+              { icon: <MapPin size={28} color="var(--gold)" />, title: 'Full Map', desc: 'Open Google Maps centred on Jaipur with all key tourist spots.', href: 'https://maps.google.com/?q=Jaipur', arrow: 'Open Maps →' },
+              { icon: <Globe size={28} color="var(--gold)" />, title: 'Language Guide', desc: 'Common Hindi phrases for tourists — greetings, numbers, and shopping.', href: '/route', arrow: 'View Tips →' },
+            ].map(({ icon, title, desc, href, arrow }, i) => (
+              <Link href={href} className="quick-card" key={i}>
+                <div className="quick-card-icon" style={{ display: 'flex', alignItems: 'center' }}>{icon}</div>
                 <div className="quick-card-title">{title}</div>
                 <div className="quick-card-desc">{desc}</div>
                 <div className="quick-card-arrow">{arrow}</div>
@@ -265,59 +267,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* DATABASE SCHEMA INFO */}
-        <div className="dash-section">
-          <div className="dash-section-title">
-            Setup: SQL Schema <span>Supabase</span>
-          </div>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem', lineHeight: 1.7 }}>
-            Paste this into your <strong style={{ color: 'var(--gold)' }}>Supabase SQL Editor</strong> (supabase.com → your project → SQL Editor → New Query) to create the required tables:
-          </p>
-          <div className="schema-box">
-            <pre><code>{`-- Profiles table (auto-created on signup)
-CREATE TABLE public.profiles (
-  id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
-  full_name TEXT,
-  avatar_url TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Auto-create profile trigger
-CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS TRIGGER AS $$
-BEGIN
-  INSERT INTO public.profiles (id, full_name)
-  VALUES (NEW.id, NEW.raw_user_meta_data->>'full_name');
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
-CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
-
--- Crowd trails for heatmap
-CREATE TABLE public.crowd_trails (
-  id BIGSERIAL PRIMARY KEY,
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  lat DOUBLE PRECISION NOT NULL,
-  lng DOUBLE PRECISION NOT NULL,
-  recorded_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE INDEX idx_trails_bbox ON public.crowd_trails(lat, lng);
-CREATE INDEX idx_trails_time ON public.crowd_trails(recorded_at DESC);
-
-ALTER TABLE public.crowd_trails ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Users insert own trails"
-  ON public.crowd_trails FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
-
-CREATE POLICY "Public can read trails"
-  ON public.crowd_trails FOR SELECT USING (true);`}</code></pre>
-          </div>
-        </div>
+        {/* DATABASE SCHEMA INFO (Removed by user request) */}
 
         {/* Footer */}
         <footer style={{ background: '#080603', borderTop: '1px solid rgba(59,167,143,0.1)', padding: '2rem', textAlign: 'center', marginTop: '2rem' }}>

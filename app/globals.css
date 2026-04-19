@@ -6,8 +6,8 @@
   --atlas-cream: #F0F4F2;
   --atlas-pure: #F6FCF1;
   
-  --gold: #479282; /* Mapped to sage for backwards compatibility with some components */
-  --gold-light: #64B1A0;
+  --gold: #D4AF37; /* Royal gold from hello.html */
+  --gold-light: #E5C76B;
   --terracotta-dark: #153A30;
   --maroon: #1E463A;
   
@@ -18,6 +18,7 @@
   --text-main: #1A2823;
   --text-muted: #567368;
   --text-inverse: #F6F8F7;
+  --sand: #EEF1F0;
 }
 
 [data-theme='dark'] {
@@ -381,7 +382,109 @@ footer {
 }
 
 /* ===== RESPONSIVE ===== */
+/* ===== LOCATION STRIP ===== */
+.location-strip {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  height: 260px;
+  position: relative;
+  background: var(--atlas-green);
+}
+
+.location-strip-inner {
+  display: flex;
+  gap: 0;
+  animation: stripSlide 40s linear infinite;
+  will-change: transform;
+}
+
+.location-strip-inner:hover {
+  animation-play-state: paused;
+}
+
+@keyframes stripSlide {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.strip-item {
+  position: relative;
+  flex-shrink: 0;
+  width: 380px;
+  height: 260px;
+  overflow: hidden;
+}
+
+.strip-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.6) saturate(0.8);
+  transition: all 0.5s ease;
+}
+
+.strip-item:hover img {
+  filter: brightness(0.9) saturate(1.1);
+  transform: scale(1.05);
+}
+
+.strip-item-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem;
+  background: linear-gradient(to top, rgba(21, 58, 48, 0.95) 0%, transparent 100%);
+  font-family: 'Playfair Display', serif;
+  transform: translateY(10px);
+  transition: transform 0.4s ease;
+}
+
+.strip-item:hover .strip-item-label {
+  transform: translateY(0);
+}
+
+.strip-item-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 1px;
+}
+
+.strip-item-sub {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--atlas-cream);
+  opacity: 0.8;
+  margin-top: 0.3rem;
+}
+
+/* Factor Cards */
+.fact-card {
+  background: var(--atlas-pure);
+  border: 1px solid rgba(21, 58, 48, 0.08);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.fact-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--atlas-sage);
+  box-shadow: 0 10px 30px rgba(21, 58, 48, 0.08);
+}
+
+.fact-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+.fact-label { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--atlas-sage); font-weight: 700; }
+.fact-value { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--atlas-green); margin-top: 0.2rem; font-weight: 600; }
+
 @media (max-width: 900px) {
   nav { padding: 1rem 1.2rem; }
   .nav-links { display: none; }
+  .strip-item { width: 300px; }
 }

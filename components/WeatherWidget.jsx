@@ -82,27 +82,27 @@ export default function WeatherWidget() {
         gap: '1rem',
       }}>
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.8rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(0,0,0,0.1)', paddingBottom: '0.8rem' }}>
           <div>
-            <div style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--atlas-sage)', marginBottom: '0.2rem' }}>Jaipur, Rajasthan</div>
-            <div style={{ fontSize: '1.2rem', fontWeight: 600, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Icon size={20} color={color} /> {label}
+            <div style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: '#000000', marginBottom: '0.2rem', fontWeight: 700 }}>Jaipur, Rajasthan</div>
+            <div style={{ fontSize: '1.2rem', fontWeight: 600, color: '#000000', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Icon size={20} color={color === '#cbd5e1' || color === '#e2e8f0' ? '#64748b' : color} /> {label}
             </div>
           </div>
-          <div style={{ fontSize: '2.5rem', fontWeight: 700, fontFamily: "'Playfair Display',serif", color: 'var(--text-main)' }}>
+          <div style={{ fontSize: '2.5rem', fontWeight: 700, fontFamily: "'Playfair Display',serif", color: '#000000' }}>
             {Math.round(c.temperature_2m)}°
           </div>
         </div>
 
         {/* Stats */}
         <div style={{ display: 'flex', gap: '1.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)' }}>
-            <Droplets size={16} color="#93c5fd" />
-            <span style={{ fontSize: '0.85rem' }}>{Math.round(c.relative_humidity_2m)}%</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#000000' }}>
+            <Droplets size={16} color="#3b82f6" />
+            <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>{Math.round(c.relative_humidity_2m)}%</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)' }}>
-            <Wind size={16} color="#cbd5e1" />
-            <span style={{ fontSize: '0.85rem' }}>{Math.round(c.wind_speed_10m)} km/h</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#000000' }}>
+            <Wind size={16} color="#475569" />
+            <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>{Math.round(c.wind_speed_10m)} km/h</span>
           </div>
         </div>
       </div>

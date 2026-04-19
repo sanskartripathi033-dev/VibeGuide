@@ -3,6 +3,7 @@ import Navbar from '@/components/Navbar';
 import ImageWithLightbox from '@/components/ImageWithLightbox';
 import Link from 'next/link';
 import { useEffect } from 'react';
+import { Brain, Globe, Clock, TrendingDown, Backpack, Smartphone } from 'lucide-react';
 
 function useReveal() {
   useEffect(() => {
@@ -60,15 +61,15 @@ export default function AboutPage() {
               
               <div className="about-facts">
                 {[
-                  ['🧠', 'Intelligence', 'Powered by Gemini AI Engine'],
-                  ['🌍', 'Coverage', 'Supports over 200+ Countries'],
-                  ['⏱️', 'Speed', 'Full itineraries in ~20 seconds'],
-                  ['📉', 'Budgeting', 'Real-time Transport & Spend estimates'],
-                  ['🎒', 'Flexible', 'Tailored for any duration or budget'],
-                  ['📱', 'PWA', 'Installable as a Mobile Application'],
-                ].map(([icon, label, val]) => (
-                  <div className="fact-card" key={label}>
-                    <div className="fact-icon">{icon}</div>
+                  [<Brain size={24} color="var(--gold)" />, 'Intelligence', 'Powered by Gemini AI Engine'],
+                  [<Globe size={24} color="var(--gold)" />, 'Coverage', 'Supports over 200+ Countries'],
+                  [<Clock size={24} color="var(--gold)" />, 'Speed', 'Full itineraries in ~20 seconds'],
+                  [<TrendingDown size={24} color="var(--gold)" />, 'Budgeting', 'Real-time Transport & Spend estimates'],
+                  [<Backpack size={24} color="var(--gold)" />, 'Flexible', 'Tailored for any duration or budget'],
+                  [<Smartphone size={24} color="var(--gold)" />, 'PWA', 'Installable as a Mobile Application'],
+                ].map(([icon, label, val], i) => (
+                  <div className="fact-card" key={i}>
+                    <div className="fact-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.6rem' }}>{icon}</div>
                     <div className="fact-label">{label}</div>
                     <div className="fact-value">{val}</div>
                   </div>
@@ -115,8 +116,8 @@ export default function AboutPage() {
       </section>
 
       <style>{`
-        .about-grid { display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center; }
-        .about-image-stack { position:relative;height:500px; }
+        .about-grid { display:grid;grid-template-columns:minmax(300px, 1fr) 1.2fr;gap:3rem;align-items:center; width:100%; }
+        .about-image-stack { position:relative;height:500px; width:100%; max-width:450px; margin:0 auto; }
         .about-img { position:absolute;border-radius:4px;object-fit:cover;transition:transform 0.4s; }
         .about-img:hover { transform:scale(1.03);z-index:5; }
         .about-img-main { width:72%;height:80%;top:0;left:0;box-shadow:12px 12px 40px rgba(0,0,0,0.7);border:1px solid rgba(59,167,143,0.2); }
@@ -146,9 +147,9 @@ export default function AboutPage() {
         .timeline-title { font-family:'Outfit',sans-serif; font-size:1.1rem; color:var(--gold); margin-bottom:0.8rem; text-transform:uppercase; letter-spacing:1px; }
         .timeline-desc { font-family:'Cormorant Garamond',serif; font-size:1.1rem; line-height:1.6; color:var(--text-muted); }
 
-        @media(max-width:900px){
-          .about-grid{grid-template-columns:1fr}
-          .about-image-stack{height:380px}
+        @media(max-width:1050px){
+          .about-grid{grid-template-columns:1fr; gap:4rem;}
+          .about-image-stack{height:400px; width:80%;}
         }
         @media(max-width:600px){
           .about-facts{grid-template-columns:1fr}

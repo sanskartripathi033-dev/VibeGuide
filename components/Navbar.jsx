@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import ThemeToggle from '@/components/ThemeToggle';
+import { MapPin } from 'lucide-react';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -123,11 +124,11 @@ export default function Navbar() {
         <li>
           {location ? (
             <span style={{ fontSize: '0.8rem', color: 'var(--text-main)', border: '1px solid var(--gold)', padding: '0.4rem 0.8rem', borderRadius: '9999px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-              📍 {location}
+              <MapPin size={12} /> {location}
             </span>
           ) : (
-            <button onClick={handleLocate} disabled={isLocating} style={{ fontSize: '0.8rem', color: 'var(--gold)', background: 'transparent', border: '1px dashed var(--gold)', padding: '0.4rem 0.8rem', borderRadius: '9999px', cursor: 'pointer' }}>
-              {isLocating ? 'Locating...' : '📍 Detect Location'}
+            <button onClick={handleLocate} disabled={isLocating} style={{ fontSize: '0.8rem', color: 'var(--gold)', background: 'transparent', border: '1px dashed var(--gold)', padding: '0.4rem 0.8rem', borderRadius: '9999px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <MapPin size={12} /> {isLocating ? 'Locating...' : 'Detect Location'}
             </button>
           )}
         </li>
