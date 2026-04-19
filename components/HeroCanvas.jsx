@@ -122,10 +122,7 @@ export default function HeroCanvas() {
             animation: 'fadeDown 1s ease 0.4s both',
             color: 'white'
           }}>
-            Discover <p style={{ color: 'var(--gold)' }}>The World</p>  <span style={{
-              background: 'linear-gradient(135deg, var(--gold-light) 0%, var(--terracotta-light) 60%, var(--maroon-light) 100%)',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontStyle: 'italic',
-            }}>The World</span>
+            Discover <span style={{ color: 'var(--gold)' }}>The World</span>
           </h1>
 
           <p style={{
