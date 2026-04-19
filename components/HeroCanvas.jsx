@@ -122,7 +122,7 @@ export default function HeroCanvas() {
             animation: 'fadeDown 1s ease 0.4s both',
             color: 'white'
           }}>
-            Discover <span style={{
+            Discover <p style={{ color: 'var(--gold)' }}>The World</p>  <span style={{
               background: 'linear-gradient(135deg, var(--gold-light) 0%, var(--terracotta-light) 60%, var(--maroon-light) 100%)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontStyle: 'italic',
             }}>The World</span>
@@ -141,13 +141,13 @@ export default function HeroCanvas() {
             display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap',
             animation: 'fadeDown 1s ease 0.8s both', pointerEvents: 'all', maxWidth: '500px', margin: '0 auto'
           }}>
-            <input 
-              type="text" 
-              name="dest" 
-              placeholder="e.g. Paris, Tokyo, New York..." 
+            <input
+              type="text"
+              name="dest"
+              placeholder="e.g. Paris, Tokyo, New York..."
               style={{
                 flex: 1, minWidth: '200px', padding: '1rem 1.5rem', borderRadius: '4px',
-                border: '1px solid rgba(59,167,143,0.3)', background: 'rgba(13,22,20,0.5)', 
+                border: '1px solid rgba(59,167,143,0.3)', background: 'rgba(13,22,20,0.5)',
                 color: '#fff', fontSize: '1.1rem', outline: 'none', backdropFilter: 'blur(5px)'
               }}
               required
