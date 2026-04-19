@@ -53,10 +53,10 @@ export default function AboutPage() {
               <div className="section-label">✦ Global Planner</div>
               <h2 className="section-title">The Soul of <em>Smart Travel</em></h2>
               <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '1.1rem', color: 'var(--text-muted)', lineHeight: 1.8, marginBottom: '1.5rem' }}>
-                VibeGuide is a cutting-edge itinerary architect designed to transform how you explore the world. Powered by advanced <strong style={{ color: 'var(--gold)' }}>AI Models</strong>, we curate bespoke journeys across continents globally.
+                ATLAS is a cutting-edge itinerary architect designed to transform how you explore the world. Powered by advanced <strong style={{ color: 'var(--gold)' }}>AI Models</strong>, we curate bespoke journeys across continents globally.
               </p>
               <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '1.1rem', color: 'var(--text-muted)', lineHeight: 1.8, marginBottom: '2rem' }}>
-                Whether you're visiting the neon streets of Tokyo, ancient Roman ruins, or finding the perfect Parisian café, VibeGuide delivers high-precision, personalized travel intelligence instantly.
+                Whether you're visiting the neon streets of Tokyo, ancient Roman ruins, or finding the perfect Parisian café, ATLAS delivers high-precision, personalized travel intelligence instantly.
               </p>
               
               <div className="about-facts">
@@ -91,7 +91,7 @@ export default function AboutPage() {
           <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
             <span className="section-label">✦ Under the Hood</span>
             <h2 className="section-title">The AI <em style={{ fontStyle: 'italic', color: 'var(--terracotta-light)' }}>Architecture</em></h2>
-            <p className="section-desc" style={{ margin: '0 auto' }}>How VibeGuide turns your simple input into a comprehensive, hour-by-hour adventure.</p>
+            <p className="section-desc" style={{ margin: '0 auto' }}>How ATLAS turns your simple input into a comprehensive, hour-by-hour adventure.</p>
           </div>
 
           <div className="timeline-container">

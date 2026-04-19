@@ -261,7 +261,7 @@ export default function DashboardPage() {
             <div className="profile-info">
               <div className="profile-name">{displayName}</div>
               <div className="profile-email">{user?.email}</div>
-              <div className="profile-joined">✦ VibeGuide Member</div>
+              <div className="profile-joined">✦ ATLAS Member</div>
             </div>
             <button onClick={handleLogout} className="btn btn-danger">Sign Out</button>
           </div>
@@ -271,8 +271,8 @@ export default function DashboardPage() {
 
         {/* Footer */}
         <footer style={{ background: '#080603', borderTop: '1px solid rgba(59,167,143,0.1)', padding: '2rem', textAlign: 'center', marginTop: '2rem' }}>
-          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.5rem', fontWeight: 900, background: 'linear-gradient(135deg,#3BA78F,#78D59A)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '0.4rem' }}>VibeGuide</div>
-          <div style={{ fontSize: '0.75rem', color: 'rgba(160,128,96,0.4)' }}>© 2025 VibeGuide · Your Jaipur Travel Companion</div>
+          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.5rem', fontWeight: 900, background: 'linear-gradient(135deg,#3BA78F,#78D59A)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '0.4rem' }}>ATLAS</div>
+          <div style={{ fontSize: '0.75rem', color: 'rgba(160,128,96,0.4)' }}>© 2025 ATLAS · Your Jaipur Travel Companion</div>
         </footer>
 
       </div>

@@ -143,24 +143,6 @@ export default function HomePage() {
       {/* ── HERO ── */}
       <div id="home" className="hero-animation-container">
         <HeroCanvas />
-        <div className="hero-content">
-          <div className="hero-badge reveal glowing-slogan" style={{
-            boxShadow: '0 0 15px rgba(255,255,255,0.4)',
-            textShadow: '0 0 8px rgba(255,255,255,0.6)',
-            background: 'rgba(255,255,255,0.1)'
-          }}>✦ ATLAS — Your Travel Companion ✦</div>
-          <h1 className="hero-title reveal">
-            Discover<span>the world</span>
-          </h1>
-          <p className="hero-sub reveal">
-            Your royal guide to Jaipur's legendary forts, living bazaars, hidden cafés & golden sunsets of Rajasthan
-          </p>
-          <div className="hero-cta reveal">
-            <a href="#monuments" className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><MapPin size={16} /> Iconic Monuments</a>
-            <a href="#explore" className="btn btn-gold" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Coffee size={16} /> Cafés & Bazaars</a>
-            <a href="#ride" className="btn btn-ghost" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Car size={16} /> Plan Your Ride</a>
-          </div>
-        </div>
       </div>
 
       {/* ── ABOUT & FACTS ── */}

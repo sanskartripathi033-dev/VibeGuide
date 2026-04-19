@@ -113,17 +113,16 @@ export default function HeroCanvas() {
             fontFamily: "'Dancing Script', cursive", fontSize: '1.1rem', letterSpacing: '2px',
             padding: '0.35rem 1.2rem', borderRadius: '2px', marginBottom: '1.5rem',
             animation: 'fadeDown 1s ease 0.2s both',
-          }}>✦ VibeGuide — Your Global Travel Companion ✦</div>
+          }}>✦ ATLAS — Your Global Travel Companion ✦</div>
 
           <h1 style={{
             fontFamily: "'Dancing Script', cursive",
             fontSize: 'clamp(3.5rem, 12vw, 9rem)', fontWeight: 700,
             lineHeight: 0.9, letterSpacing: '-2px',
             animation: 'fadeDown 1s ease 0.4s both',
+            color: 'white'
           }}>
-            Discover
-            <span style={{
-              display: 'block',
+            Discover <span style={{
               background: 'linear-gradient(135deg, var(--gold-light) 0%, var(--terracotta-light) 60%, var(--maroon-light) 100%)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontStyle: 'italic',
             }}>The World</span>

@@ -249,7 +249,7 @@ export default function LoginPage() {
           <div className="login-left-bg" />
           <div className="login-left-overlay" />
           <div className="login-left-content">
-            <div className="login-brand">VibeGuide</div>
+            <div className="login-brand">ATLAS</div>
             <div className="login-brand-sub">Your Royal Jaipur Travel Companion</div>
             <div className="login-quote">&ldquo;Jaipur is not just a city,<br />it is a state of mind.&rdquo;</div>
             <div className="login-quote-attr">— The Pink City, Rajasthan</div>
@@ -260,7 +260,7 @@ export default function LoginPage() {
         <div className="login-right">
           <div className="login-card">
             <div className="card-title">
-              {tab === 'signin' ? 'Welcome Back' : 'Join VibeGuide'}
+              {tab === 'signin' ? 'Welcome Back' : 'Join ATLAS'}
             </div>
             <div className="card-subtitle">
               {tab === 'signin'
@@ -319,7 +319,7 @@ export default function LoginPage() {
                   />
                 </div>
                 <button className="submit-btn" type="submit" disabled={loading}>
-                  {loading ? 'Signing in…' : '✦ Sign In to VibeGuide'}
+                  {loading ? 'Signing in…' : '✦ Sign In to ATLAS'}
                 </button>
               </form>
             )}
@@ -375,7 +375,7 @@ export default function LoginPage() {
 
             <div className="divider">or</div>
 
-            <Link href="/" className="back-link">← Back to VibeGuide Home</Link>
+            <Link href="/" className="back-link">← Back to ATLAS Home</Link>
           </div>
         </div>
       </div>
