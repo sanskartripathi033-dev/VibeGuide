@@ -49,11 +49,13 @@ export function LiveTranslatorPanel({ onClose }) {
         recognitionRef.current.onerror = (event) => {
           setIsListening(false);
           if (event.error === 'not-allowed') {
-            setErrorMsg('Mic access denied. Enable it in browser settings.');
+            setErrorMsg('Mic access denied. Click the 🔒 icon in your browser address bar and allow microphone.');
           } else if (event.error === 'network') {
-            setErrorMsg('Voice input requires localhost or HTTPS. Use http://localhost:3000.');
+            setErrorMsg('Speech service connection failed. Please tap the mic to try again, or use the text box instead.');
+          } else if (event.error === 'no-speech') {
+            setErrorMsg('No speech detected. Please speak clearly and try again.');
           } else if (event.error !== 'aborted') {
-            setErrorMsg('Microphone error: ' + event.error);
+            setErrorMsg('Mic error: ' + event.error + '. Try using Chrome browser.');
           }
         };
 
