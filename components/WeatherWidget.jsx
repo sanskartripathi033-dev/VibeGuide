@@ -28,7 +28,7 @@ export default function WeatherWidget() {
     fetch(
       `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}` +
       `&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m` +
-      `&timezone=Asia%2FKolkata`
+      `&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia%2FKolkata&forecast_days=4`
     )
       .then(r => r.json())
       .then(data => {
@@ -104,6 +104,46 @@ export default function WeatherWidget() {
             <Wind size={16} color="#475569" />
             <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>{Math.round(c.wind_speed_10m)} km/h</span>
           </div>
+        </div>
+
+        {/* Travel Recommendation Tip */}
+        <div style={{ background: 'rgba(59,167,143,0.1)', padding: '0.8rem', borderRadius: '12px', display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
+          <span style={{ fontSize: '1.2rem' }}>
+            {[51, 53, 55, 61, 63, 65, 71, 73, 75, 80, 81, 82, 95, 96, 99].includes(c.weather_code) ? '☂️' : c.temperature_2m > 35 ? '🔥' : '✨'}
+          </span>
+          <div style={{ fontSize: '0.75rem', color: '#000000', fontWeight: 600, lineHeight: 1.4 }}>
+            {[51, 53, 55, 61, 63, 65, 71, 73, 75, 80, 81, 82, 95, 96, 99].includes(c.weather_code) 
+              ? "Rain expected. Great for indoor cafés and palaces!" 
+              : c.temperature_2m > 35 
+                ? "Quite hot! Stay hydrated and pick indoor spots early." 
+                : "Perfect weather to go out and explore the monuments!"}
+          </div>
+        </div>
+
+        {/* 3-Day Forecast */}
+        <div style={{ marginTop: '0.5rem', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+          <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '2px', fontWeight: 700, color: 'var(--text-muted)' }}>Upcoming</div>
+          {weather.daily?.time?.slice(1, 4).map((dateStr, i) => {
+            const dateObj = new Date(dateStr);
+            const dayName = i === 0 ? 'Tomorrow' : dateObj.toLocaleDateString('en-US', { weekday: 'short' });
+            const maxTemp = Math.round(weather.daily.temperature_2m_max[i + 1]);
+            const minTemp = Math.round(weather.daily.temperature_2m_min[i + 1]);
+            const dCode = weather.daily.weather_code[i + 1];
+            const DIcon = getWMOInfo(dCode).Icon;
+            const dColor = getWMOInfo(dCode).color;
+
+            return (
+              <div key={dateStr} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.85rem', color: '#000000' }}>
+                <div style={{ width: '4rem', fontWeight: 600 }}>{dayName}</div>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <DIcon size={16} color={dColor === '#cbd5e1' || dColor === '#e2e8f0' ? '#64748b' : dColor} />
+                </div>
+                <div style={{ fontWeight: 600, display: 'flex', gap: '8px' }}>
+                  <span>{maxTemp}°</span> <span style={{ color: 'var(--text-muted)' }}>{minTemp}°</span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
