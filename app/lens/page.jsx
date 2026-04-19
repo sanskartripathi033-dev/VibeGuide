@@ -1,5 +1,6 @@
 'use client';
 import { useState, useRef } from 'react';
+import Navbar from '@/components/Navbar';
 
 const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8080';
 
