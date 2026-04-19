@@ -1,30 +1,33 @@
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { NextResponse } from 'next/server';
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+const genAI = new GoogleGenerativeAI(apiKey || 'MISSING_KEY');
 
 export async function POST(req) {
   try {
+    if (!apiKey) {
+      return NextResponse.json({ error: 'API key not configured' }, { status: 500 });
+    }
+
     const { text, targetLanguage } = await req.json();
     if (!text || !targetLanguage) {
       return NextResponse.json({ error: 'Missing text or targetLanguage' }, { status: 400 });
     }
 
-    // Creating a highly constrained prompt to output pure text translation
     const prompt = `Translate the following text strictly into the locale '${targetLanguage}'. 
 Never include surrounding quotes, markdown, explanations, or notes. Output ONLY the raw translated string. 
 Text to translate:
 ${text}`;
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: prompt,
-    });
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const translatedText = response.text();
 
-    const translatedText = response.text || '';
     return NextResponse.json({ translatedText: translatedText.trim() });
   } catch (err) {
     console.error('Translation error:', err);
-    return NextResponse.json({ error: 'Translation failed' }, { status: 500 });
+    return NextResponse.json({ error: 'Translation failed. Please try again.' }, { status: 500 });
   }
 }
