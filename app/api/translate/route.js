@@ -1,16 +1,16 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenAI } from '@google/genai';
 import { NextResponse } from 'next/server';
-
-const apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-const genAI = new GoogleGenerativeAI(apiKey || 'MISSING_KEY');
 
 export async function POST(req) {
   try {
+    const apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
     if (!apiKey) {
-      return NextResponse.json({ error: 'API key not configured' }, { status: 500 });
+      return NextResponse.json({ error: 'API key not configured in environment variables!' }, { status: 500 });
     }
 
+    const ai = new GoogleGenAI({ apiKey: apiKey });
     const { text, targetLanguage } = await req.json();
+
     if (!text || !targetLanguage) {
       return NextResponse.json({ error: 'Missing text or targetLanguage' }, { status: 400 });
     }
@@ -20,14 +20,15 @@ Never include surrounding quotes, markdown, explanations, or notes. Output ONLY 
 Text to translate:
 ${text}`;
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const translatedText = response.text();
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: prompt,
+    });
 
+    const translatedText = response.text || '';
     return NextResponse.json({ translatedText: translatedText.trim() });
   } catch (err) {
     console.error('Translation error:', err);
-    return NextResponse.json({ error: 'Translation failed. Please try again.' }, { status: 500 });
+    return NextResponse.json({ error: 'Translation failed. Please try again.', details: err.message }, { status: 500 });
   }
 }

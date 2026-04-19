@@ -48,7 +48,6 @@ export default function LiveTranslator() {
         };
 
         recognitionRef.current.onerror = (event) => {
-          console.error("Speech error:", event.error);
           setIsListening(false);
           setErrorMsg('Microphone error: ' + event.error);
         };
