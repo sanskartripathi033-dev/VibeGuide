@@ -25,7 +25,7 @@ export async function POST(req) {
     const finalPrompt = `${systemPrompt}\n\nChat History:\n${history}\n\nUser: ${lastMessage}\nATLAS:`;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: process.env.GEMINI_MODEL || 'gemini-2.0-flash',
       contents: finalPrompt,
     });
 

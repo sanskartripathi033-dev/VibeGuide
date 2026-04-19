@@ -1,5 +1,6 @@
 import './globals.css';
 import { Providers } from '@/components/Providers';
+import ChatBot from '@/components/ChatBot';
 
 export const metadata = {
   title: 'ATLAS',
@@ -20,7 +21,10 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/favicon.png" />
       </head>
       <body suppressHydrationWarning>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <ChatBot />
+        </Providers>
       </body>
     </html>
   );

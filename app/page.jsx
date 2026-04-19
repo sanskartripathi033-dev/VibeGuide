@@ -2,7 +2,6 @@
 import Navbar from '@/components/Navbar';
 import HeroCanvas from '@/components/HeroCanvas';
 import HeatMap from '@/components/HeatMap';
-import LiveTranslator from '@/components/LiveTranslator';
 import ChatBot from '@/components/ChatBot';
 import WishlistFAB from '@/components/WishlistFAB';
 import NearbyMonuments from '@/components/NearbyMonuments';
@@ -523,7 +522,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-      <LiveTranslator />
       <ChatBot />
       <WishlistFAB />
 

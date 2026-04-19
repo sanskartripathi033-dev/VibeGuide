@@ -12,9 +12,13 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Missing text or targetLanguage' }, { status: 400 });
     }
 
-    // Direct REST API call (No SDK) - Most reliable method
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-    
+    const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+    // Preview/experimental models require v1alpha; stable models use v1beta
+    const apiVersion = (model.includes('2.5') || model.includes('exp') || model.includes('preview'))
+      ? 'v1alpha'
+      : 'v1beta';
+    const url = `https://generativelanguage.googleapis.com/${apiVersion}/models/${model}:generateContent?key=${apiKey}`;
+
     const payload = {
       contents: [{
         parts: [{
@@ -37,23 +41,23 @@ export async function POST(req) {
     }
 
     const translatedText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    
-    return NextResponse.json({ 
+
+    return NextResponse.json({
       translatedText: translatedText.trim(),
       method: 'Direct REST'
     });
 
   } catch (err) {
     console.error('Translation Error:', err.message);
-    
+
     let userMsg = 'Translation failed.';
     if (err.message.includes('not found') || err.message.includes('404')) {
-        userMsg = 'API ERROR: Model not found. This key likely belongs to a Google Project that HAS NOT ENABLED the "Generative Language API".';
+      userMsg = 'API ERROR: Model not found. This key likely belongs to a Google Project that HAS NOT ENABLED the "Generative Language API".';
     } else if (err.message.includes('API key not valid')) {
-        userMsg = 'API ERROR: The API key provided is invalid.';
+      userMsg = 'API ERROR: The API key provided is invalid.';
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       error: userMsg,
       details: err.message
     }, { status: 500 });
